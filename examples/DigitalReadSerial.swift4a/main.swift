@@ -12,5 +12,5 @@ pinMode(pin: pushButton, mode: INPUT)
 while(true) {
   let pinValue: Bool = digitalRead(pin: 7)
   print(unsignedInt: pinValue ? 1 : 0)
-  delay(milliseconds: 1)
+  delay(milliseconds: 500)
 }

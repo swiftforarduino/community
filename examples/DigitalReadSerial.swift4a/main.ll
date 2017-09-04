@@ -37,7 +37,7 @@ entry:
 ; <label>:10:                                     ; preds = %8, %9
   %11 = phi i16 [ 0, %9 ], [ 1, %8 ]
   call void @_TF3AVR5printFT11unsignedIntVs6UInt16_T_(i16 %11)
-  call void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16 1)
+  call void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16 500)
   br label %5
 }
 

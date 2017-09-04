@@ -18,7 +18,7 @@ entry:
 ; <label>:4:                                      ; preds = %3
   %5 = call i16 @_TF3AVR14slowAnalogReadFT3pinVs5UInt8_Vs6UInt16(i8 0)
   call void @_TF3AVR5printFT11unsignedIntVs6UInt16_T_(i16 %5)
-  call void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16 1)
+  call void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16 500)
   br label %3
 }
 
