@@ -36,7 +36,8 @@ entry:
 
 ; <label>:10:                                     ; preds = %8, %9
   %11 = phi i16 [ 0, %9 ], [ 1, %8 ]
-  call void @_TF3AVR5printFT11unsignedIntVs6UInt16_T_(i16 %11)
+  %12 = call i1 @_TIF3AVR5printFT11unsignedIntVs6UInt1610addNewlineSb_T_A0_()
+  call void @_TF3AVR5printFT11unsignedIntVs6UInt1610addNewlineSb_T_(i16 %11, i1 %12)
   call void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16 500)
   br label %5
 }
@@ -47,7 +48,9 @@ declare void @_TF3AVR7pinModeFT3pinVs5UInt84modeSb_T_(i8, i1) #0
 
 declare i1 @_TF3AVR11digitalReadFT3pinVs5UInt8_Sb(i8) #0
 
-declare void @_TF3AVR5printFT11unsignedIntVs6UInt16_T_(i16) #0
+declare void @_TF3AVR5printFT11unsignedIntVs6UInt1610addNewlineSb_T_(i16, i1) #0
+
+declare i1 @_TIF3AVR5printFT11unsignedIntVs6UInt1610addNewlineSb_T_A0_() #0
 
 declare void @_TF3AVR5delayFT12millisecondsVs6UInt16_T_(i16) #0
 

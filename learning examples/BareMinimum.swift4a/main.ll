@@ -3,20 +3,35 @@ source_filename = "main.ll"
 target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-apple-macosx10.9"
 
+%Vs5UInt8 = type <{ i8 }>
+%Sb = type <{ i1 }>
+
+@_Tv4main3ledVs5UInt8 = hidden global %Vs5UInt8 zeroinitializer, align 1
+@OUTPUT = external constant i8, align 1
 @__swift_reflection_version = linkonce_odr hidden constant i16 1
 @llvm.used = appending global [1 x i8*] [i8* bitcast (i16* @__swift_reflection_version to i8*)], section "llvm.metadata", align 8
 
 define i32 @main(i32, i8**) #0 {
 entry:
   %2 = bitcast i8** %1 to i8*
-  br label %3
+  store i8 9, i8* getelementptr inbounds (%Vs5UInt8, %Vs5UInt8* @_Tv4main3ledVs5UInt8, i32 0, i32 0), align 1
+  %3 = load i8, i8* getelementptr inbounds (%Vs5UInt8, %Vs5UInt8* @_Tv4main3ledVs5UInt8, i32 0, i32 0), align 1
+  %4 = load i1, i1* getelementptr inbounds (%Sb, %Sb* bitcast (i8* @OUTPUT to %Sb*), i32 0, i32 0), align 1
+  call void @_TF3AVR7pinModeFT3pinVs5UInt84modeSb_T_(i8 %3, i1 %4)
+  %5 = load i8, i8* getelementptr inbounds (%Vs5UInt8, %Vs5UInt8* @_Tv4main3ledVs5UInt8, i32 0, i32 0), align 1
+  call void @_TF3AVR11analogWriteFT3pinVs5UInt85valueS0__T_(i8 %5, i8 1)
+  br label %6
 
-; <label>:3:                                      ; preds = %4, %entry
-  br label %4
+; <label>:6:                                      ; preds = %7, %entry
+  br label %7
 
-; <label>:4:                                      ; preds = %3
-  br label %3
+; <label>:7:                                      ; preds = %6
+  br label %6
 }
+
+declare void @_TF3AVR7pinModeFT3pinVs5UInt84modeSb_T_(i8, i1) #0
+
+declare void @_TF3AVR11analogWriteFT3pinVs5UInt85valueS0__T_(i8, i8) #0
 
 attributes #0 = { "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "target-cpu"="core2" "target-features"="+ssse3,+cx16,+fxsr,+mmx,+x87,+sse,+sse2,+sse3" }
 

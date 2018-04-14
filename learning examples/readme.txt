@@ -1,0 +1,1 @@
+These examples are meant to be similar to or equivalent to the basic examples that come with the Arduino IDE, to give you an idea how to do things on this platform.
