@@ -1,20 +1,16 @@
 import AVR
 
-//SetupSerial(baudRate: 9600)
-//print(message: Put0)
+SetupSerial(baudRate: 9600)
+print(message: Put0)
 
-//let led: UInt8 = 9
-//pinMode(pin: led, mode: OUTPUT)
+let led: UInt8 = 3
+pinMode(pin: led, mode: OUTPUT)
 
 var brightness: Int16 = 0
 var fadeAmount: Int16 = 5
 
 while(true) {
-//  let trueBrightness = UInt8(truncatingBitPattern: brightness)
-//
-//  print(unsignedInt: UInt16(trueBrightness))
-//
-//  analogWrite(pin: led, value: trueBrightness)
+  analogWrite(pin: led, value: UInt8(truncatingBitPattern: brightness))
 
   brightness = brightness &+ fadeAmount
 
@@ -22,12 +18,12 @@ while(true) {
     if fadeAmount > 0 {
       fadeAmount = -5
     }
-// else {
-//      fadeAmount = 5
-//    }
+   else {
+      fadeAmount = 5
+    }
   }
 
-//  delay(milliseconds: 3000)
+  delay(milliseconds: 30)
 }
 
 
