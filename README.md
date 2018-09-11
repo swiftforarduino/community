@@ -1,5 +1,5 @@
 # examples
-Here are some sample swift files to be used in the Swift for Arduino IDE.
+Here are some sample swift files to be used in the Swift for Arduino IDE (http://www.swiftforarduino.com).
 
 ##demos
 The intention is to demo some examples of how to do things.
