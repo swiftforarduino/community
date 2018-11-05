@@ -1,8 +1,5 @@
 import AVR
 
-SetupSerial(baudRate: 9600)
-print(message: Put0)
-
 let led: UInt8 = 3
 pinMode(pin: led, mode: OUTPUT)
 
