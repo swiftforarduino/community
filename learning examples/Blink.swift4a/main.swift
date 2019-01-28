@@ -1,8 +1,9 @@
 import AVR
 
 // Blink
-
+SetupSerial(baudRate: 9600)
 pinMode(pin: 13, mode: OUTPUT)
+print(message: Happy0)
 
 while(true) {
   // comment to check crosstalk on editors
