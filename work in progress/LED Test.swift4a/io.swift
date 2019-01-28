@@ -27,6 +27,9 @@ Advantages:
 - More Swifty, declarative style, tuples, blocks for callbacks
 - Reduce reinvention of code required to interact with common peripherals
 - Handle complex asynchronous interactions
+- Using a function for setup (in leau of direct setting a tuple) allows default 
+  parameters to simplify and reduce verbosity for common use cases and allows
+  setup code to be run wihtout relying on the client to call another function
 
 Disadvantages:
 - Hides some of the inner workings of IO pins and simple peripherals
