@@ -42,7 +42,7 @@ NAMING CONVENTIONS:
 IO Widget (type) names are UPPERCASE (ex: LED, SWITCH, PIEZO).
 
 Function names begin with the type, followed by underscore, then the camelCased 
-function name. Examples: LED_on(), LED_off(), BUTTON_isPressed(), PIEZO_silence()
+function name. Examples: LED_on(), LED_off(), BUTTON_isPressed(), PIEZO_play()
 
 
 
@@ -91,21 +91,21 @@ LED_blink(onTime, offTime, count)
 
 Button
 ----------------------
-BUTTON_setup(pin, onState, debounceTime, onAction, offAction)
-BUTTON_reset()
+BUTTON_setup(pin, onState, usePullup, onAction)
 BUTTON_isPressed()
 
 Piezo
 ----------------------
 PIEZO_setup(pin)
-PIEZO_silence()
 PIEZO_play(frequency, duration)
 
 Stepper Motor
 ----------------------
 STEPPER_setup(pin1, pin2, pin3, pin4, stepPerRev)
 STEPPER_setSpeed()
-STEPPER_step()
+STEPPER_step(count)
+STEPPER_step(degrees)
+STEPPER_step(rotations)
 
 Sensor - potentiometer, temperature, force sensor, etc.
 ----------------------
@@ -161,6 +161,23 @@ PWM outputs can conflict with running timers.
 	- timer0 used to PWM pins 5, 6
 	- timer1 used to PWM pins 9, 10
 	- timer2 used to PWM pins 11, 3
+
+
+
+FUTURE:
+-------
+Consider adding _update() functions for IO Widgets that need to keep state. Use:
+
+	// Declare and setup BUTTON
+	var myButton = BUTTON_setup(pin: 2)
+
+	while(true) {
+  
+		// Update button (tuple can be updated)
+		myButton = BUTTON_update(myButton)
+
+		delay(milliseconds: 1)
+	}
 
 */
 
@@ -283,3 +300,98 @@ public func LED_fade(_ led: LED,
 }
 
 //--------------------------------------------------------------------------------
+// BUTTON
+//--------------------------------------------------------------------------------
+
+public typealias BUTTON = (pin: ioPin, onState: ioPinState)
+
+//--------------------------------------------------------------------------------
+
+func BUTTON_setup(pin: ioPin, 
+				  onState: ioPinState = HIGH,
+				  oneShot: Bool = false,
+				usePullup: Bool = false) -> BUTTON {
+//				onAction: (@convention(c) () -> Void)? = nil) 
+  
+	// TODO: Consider adding onAction callback (this will require BUTTON_update() function be added)
+
+	let button = BUTTON(pin: pin, onState: onState)
+
+	pinMode(pin: button.pin, mode: INPUT)
+
+	if usePullup {
+		// Turn on pullup resistors  
+		digitalWrite(pin: pin, value: HIGH);       
+	}
+	else {
+		// Turn off pullup resistors  
+		digitalWrite(pin: pin, value: LOW);       
+	}
+
+	return button
+}
+
+//--------------------------------------------------------------------------------
+func BUTTON_isPressed(_ button: BUTTON) -> Bool {
+  
+  let isHigh = digitalRead(pin: button.pin)
+  
+	// If button is HIGH and HIGH is the onState, or button is LOW and LOW is the onState
+	if (isHigh && button.onState) || (!isHigh && !button.onState) {
+  		return true
+	}
+	else {
+  		return false
+	}
+}
+
+//--------------------------------------------------------------------------------
+// PIEZO
+//--------------------------------------------------------------------------------
+
+public typealias PIEZO = ioPin
+public typealias piezoNote = (delay: milliseconds, cyclesPerTenthSec: UInt16)
+
+// timeHigh = 1/(2 * toneFrequency) = period / 2
+let PIEZO_c: piezoNote = (delay: 1915, cyclesPerTenthSec: 26)
+let PIEZO_d: piezoNote = (delay: 1700, cyclesPerTenthSec: 29)
+let PIEZO_e: piezoNote = (delay: 1519, cyclesPerTenthSec: 33)
+let PIEZO_f: piezoNote = (delay: 1432, cyclesPerTenthSec: 35)
+let PIEZO_g: piezoNote = (delay: 1275, cyclesPerTenthSec: 39)
+let PIEZO_a: piezoNote = (delay: 1136, cyclesPerTenthSec: 44)
+let PIEZO_b: piezoNote = (delay: 1014, cyclesPerTenthSec: 49)
+let PIEZO_C: piezoNote = (delay: 956, cyclesPerTenthSec: 52)
+
+//--------------------------------------------------------------------------------
+func PIEZO_setup(pin: ioPin) -> PIEZO {
+  
+	let piezo = pin
+	pinMode(pin: piezo, mode: OUTPUT)
+
+	return piezo
+}
+
+//--------------------------------------------------------------------------------
+func PIEZO_play(_ piezo: PIEZO, note: piezoNote, tenthsOfASecond: UInt16, postDelay: milliseconds = 0) {
+
+	// I would like to use for...in loops here, but they don't work now outside of main tab.
+
+	var tenths: UInt16 = tenthsOfASecond
+	while (tenths > 0) {
+		var cycles: UInt16 = note.cyclesPerTenthSec
+		while (cycles > 0) {
+  			// Create a square wave of proper frequency to play the note
+			digitalWrite(pin: piezo, value: HIGH)
+			delay(microseconds: note.delay)
+			digitalWrite(pin: piezo, value: LOW)
+			delay(microseconds: note.delay)
+			cycles = cycles &- 1
+		}
+		tenths = tenths &- 1
+	}
+
+	delay(milliseconds: postDelay)
+}
+
+//--------------------------------------------------------------------------------
+
