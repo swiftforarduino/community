@@ -14,11 +14,24 @@
 
 import AVR
 
+/*
+
+NOTES
+
+Many tests of the IOWidget API are included in this file. This is to simplify
+development while it is Work In Progress. Eventually, this file will be broken
+into several smaller, simpler files to help new users focus and have less code
+to wade through.
+
+*/
+
 //-------------------------------------------------------------------------------
 // Setup
 
+//SetupSerial(baudRate: 9600)
+
 // Declare some IO Widgets
-let myLED = LED_setup(pin: 6)
+let myLED = LED_setup(pin: 6) // Use PWM pin to see LED fade
 let button = BUTTON_setup(pin: 2)
 let piezo = PIEZO_setup(pin: 3)
 
@@ -111,7 +124,6 @@ while(true) {
 	// Test BUTTON & PIEZO API
 	buttonPiezoTest()
 	delay(milliseconds: 32)
-
 }
 
 //-------------------------------------------------------------------------------
