@@ -1,0 +1,59 @@
+<h1>Swift For Arduino</h1>
+<p>FAQ</p>
+<em>Version 1.6.1</em><br>
+<em>Saturday 2nd Feb 2019</em><br>
+<ul>
+    <li><em>Q: What is it??</em>
+        <p>
+        A: This is the world's first compiler for the Swift language onto the Arduino UNO. The Arduino is a popular IoT platform but due to it's compressed characteristics, many high level languages cannot function simply. The compiler uses LLVM magic to build a .hex suitable for uploading onto an Arduino UNO. You can see more details <a href="https://skillsmatter.com/skillscasts/10773-swift-for-arduino-an-experimental-compiler">here</a>.</p>
+    </li>
+
+    <li><em>Q: What is the file format?</em>
+        <p>
+        A: The editor is mostly a simple text editor for a swift file.  When you save a new document using the editor or open an existing document, a .swift4a file is used. The actual document is a bundle, a folder, containing the core .swift files and various related files.  Firstly there is a .h file and a .c file, automagically used by the IDE for string constants in progmem.  Then after a successful build you will see a .ll file, a .elf.s file and a .hex file, etc.  The .hex is the finished program that is uploaded to the board using avrdude.  The .ll and .elf.s are intermediate files that can be used for debugging issues.  They're the LLVM IR and full asm of the finished ELF.  If you don't know what these are you can safely ignore them.  If you have issues with your program, you can send the full bundle to us, including your source code and these intermediates, together with an explanation of symptoms and we'll have a look: <a href="mailto:swiftforarduino@gmail.com">swiftforarduino@gmail.com</a>.</p>
+    </li>
+
+    <li><em>Q: Which boards are supported?</em>
+        <p>
+        A: Arduino UNO and probably most clones (untested).  The build system builds a .hex file compatile with the AVR Atmega328p microcontroller. If you plug an Arduino UNO into a USB port on your mac, the IDE should recognise the board and allow you to upload.  The IDE automatically figures out what serial device the Arduino presents and configures avrdude to upload using that interface.  It will also recognize the ICSP made by Arduino and automatically upload using that if present.  Most other ICSPs are not yet recognized.</p>
+    </li>
+
+    <li><em>Q: Can I get this working with the ESP8266 or ESP32?</em>
+        <p>
+        A: No.  LLVM does not support this architecture.  It is unlikely to work any time in the foreseeable future.  Sorry.
+        </p>
+    </li>
+    
+    <li><em>Q: Can I get this working with Arduino board XX or processor YY?</em>
+        <p>
+        A: I've had a few questions like this, which is very nice to hear as it shows people are interested! As usual with a hobby project like this, I'm doing it in my spare time with my own kit so it's limited what I can write support for. If you know what you're doing and you have an Atmega328p (or very, very similar) processor based board, you can try exporting the compiled .hex using the File menu and uploading manually. I've successfully used a hex file saved like this to upload to a bare atmega328p on a breadboard, programmed via GPIO pins off a raspberry pi 2.  See http://petosoft.wordpress.com for details!
+        </p>
+        <p>
+        For other chips (e.g. at tiny chips), it will take more work to get the build system to output a suitable .hex.  But I'm happy to do it if enough ask for it.
+        </p>
+    </li>
+
+    <li><em>Q: Does this rely on the "standard" Arduino IDE (the one from their website)?</em>
+        <p>
+        A: No. This is a completely new project.  It relies on AVR GCC/binutils/libc, which is an older and more low level set of open source projects, used as the basis for many products such as WinAVR. Also it relies on Swift, currently using the swiftc from Xcode, which must be installed. And lastly on a custom built variant of llvm.  The llvm, gcc, binutils executables and binaries should all be included in the .app package but the build relies on swiftc being present from Xcode separately.
+        </p> 
+        <p>
+            One final point, as it has been asked before, the Arduino libraries are not used. The product uses it's own libraries for hardware support, themselves partially based on Swift and partially on C, under the hood.
+        </p>
+    </li>
+    
+    <li><em>Q: Is this compatible with the Arduino IDE or libraries or the "Wiring" libraries</em>
+        <p>
+        A: This is two questions really. Firstly the Arduino IDE. Don't run this at the same time as the Swift for Arduino IDE or they will fight over the serial port!
+        </p>
+        <p>
+        Secondly, for the Arduino/Wiring libraries, there is no compatibility layer. You cannot use them. I want to build a new community. Get involved and see github swift for arduino examples page!
+        </p>
+    </li>
+    
+    <li><em>Q: Print isn't sending serial messages</em>
+        <p>
+        A: Make sure at the beginning of your main file you are calling SetupSerial somewhere.
+        </p>
+    </li>
+</ul>
