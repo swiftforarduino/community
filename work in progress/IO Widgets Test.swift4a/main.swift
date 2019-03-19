@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------
 //
-// LED Test
+// IO Widgets Test
 //
-// Examples of using the LED functions in IO Widgets.
+// Examples of using many of the functions in IO Widgets.
 //
 // Swift for Arduino (S4A)
 // swiftforarduino.com
