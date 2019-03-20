@@ -17,27 +17,10 @@ import AVR
 //-------------------------------------------------------------------------------
 // Setup
 //-------------------------------------------------------------------------------
-let rgbLEDPin: UInt8 = 13
 
+let rgbLEDPin: UInt8 = 13
 pinMode(pin: rgbLEDPin, mode: OUTPUT)
 
-//-------------------------------------------------------------------------------
-// Low Level Library API (to be provided by Carl)
-//-------------------------------------------------------------------------------
-private func iLEDSendBit(pin: UInt8, bit: Bool) {
-  
-	// Placeholder for private library function
-	// ...write bit per sendBit() function at 
-	// https://github.com/bigjosh/SimpleNeoPixelDemo/blob/master/SimpleNeopixelDemo/SimpleNeopixelDemo.ino
-}
-  
-//-------------------------------------------------------------------------------
-public func iLEDSendByte(pin: UInt8, byte: UInt8) {
-  
-	// Placeholder for public library function
-	// ...shift bits out MSB first
-}
-  
 //-------------------------------------------------------------------------------
 // Public Swift API (to become Swift user library)
 //-------------------------------------------------------------------------------
@@ -51,14 +34,22 @@ func iLEDWritePixel(pin: UInt8, r: UInt8, g: UInt8, b: UInt8, grbOrder: Bool = t
 	// then call show() or just stop sending data and it will latch on it's own after a few uS
 
 	if grbOrder {
-		iLEDSendByte(pin: pin, byte: g)
-		iLEDSendByte(pin: pin, byte: r)
-		iLEDSendByte(pin: pin, byte: b)
+// Use the more "Swifty" API once we get it in lib
+//		iLEDSendByte(pin: pin, byte: g)
+//		iLEDSendByte(pin: pin, byte: r)
+//		iLEDSendByte(pin: pin, byte: b)
+		iLEDSendByte(pin, g)
+		iLEDSendByte(pin, r)
+		iLEDSendByte(pin, b)
 	}
 	else {
-		iLEDSendByte(pin: pin, byte: r)
-		iLEDSendByte(pin: pin, byte: g)
-		iLEDSendByte(pin: pin, byte: b)
+// Use the more "Swifty" API once we get it in lib
+//		iLEDSendByte(pin: pin, byte: r)
+//		iLEDSendByte(pin: pin, byte: g)
+//		iLEDSendByte(pin: pin, byte: b)
+		iLEDSendByte(pin, r)
+		iLEDSendByte(pin, g)
+		iLEDSendByte(pin, b)
 	}
 }
 
@@ -66,7 +57,7 @@ func iLEDWritePixel(pin: UInt8, r: UInt8, g: UInt8, b: UInt8, grbOrder: Bool = t
 func iLEDShow(pin: UInt8) {
   
   // Show all pixel data recently sent via iLEDWritePixel()
-  // TODO: Delay at least xx uS here
+	delay(microseconds: 6)
 }
 
 //-------------------------------------------------------------------------------
@@ -114,6 +105,15 @@ func iLEDTheaterChase (pin: UInt8, r: UInt8, g: UInt8, b: UInt8, count: UInt16, 
 }
 
 //-------------------------------------------------------------------------------
+func iLEDLarsonScanner (pin: UInt8, r: UInt8, g: UInt8, b: UInt8, count: UInt16, delay: UInt16, grbOrder: Bool = true) {
+	
+	// Battlestar Galactica inspired back and forth scanning
+	// https://www.instructables.com/id/Build-the-Ultimate-Larson-Scanner/ 
+
+	// TODO: Implement
+}
+
+//-------------------------------------------------------------------------------
 
 // ... more cool LED strip effects to come...
 
@@ -122,15 +122,17 @@ func iLEDTheaterChase (pin: UInt8, r: UInt8, g: UInt8, b: UInt8, count: UInt16, 
 //-------------------------------------------------------------------------------
 while(true) {
 
+	let waitTime: UInt16 = 750
+
 	// Test RGB LEDs
-	iLEDShowColor (pin: rgbLEDPin, r: 255, g: 0, b: 0, count: 2)
-	delay(milliseconds: 500)
+	delay(milliseconds: waitTime)
+	iLEDShowColor(pin: rgbLEDPin, r: 255, g: 0, b: 0, count: 2)
 
-	iLEDShowColor (pin: rgbLEDPin, r: 0, g: 255, b: 0, count: 2)
-	delay(milliseconds: 500)
+	delay(milliseconds: waitTime)
+	iLEDShowColor (pin: rgbLEDPin, r: 200, g: 200, b: 200, count: 2)
 
+	delay(milliseconds: waitTime)
 	iLEDShowColor (pin: rgbLEDPin, r: 0, g: 0, b: 255, count: 2)
-	delay(milliseconds: 500)
 }
 
 //-------------------------------------------------------------------------------
