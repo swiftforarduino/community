@@ -34,22 +34,14 @@ func iLEDWritePixel(pin: UInt8, r: UInt8, g: UInt8, b: UInt8, grbOrder: Bool = t
 	// then call show() or just stop sending data and it will latch on it's own after a few uS
 
 	if grbOrder {
-// Use the more "Swifty" API once we get it in lib
-//		iLEDSendByte(pin: pin, byte: g)
-//		iLEDSendByte(pin: pin, byte: r)
-//		iLEDSendByte(pin: pin, byte: b)
-		iLEDSendByte(pin, g)
-		iLEDSendByte(pin, r)
-		iLEDSendByte(pin, b)
+		iLEDSendByte(pin: pin, byte: g)
+		iLEDSendByte(pin: pin, byte: r)
+		iLEDSendByte(pin: pin, byte: b)
 	}
 	else {
-// Use the more "Swifty" API once we get it in lib
-//		iLEDSendByte(pin: pin, byte: r)
-//		iLEDSendByte(pin: pin, byte: g)
-//		iLEDSendByte(pin: pin, byte: b)
-		iLEDSendByte(pin, r)
-		iLEDSendByte(pin, g)
-		iLEDSendByte(pin, b)
+		iLEDSendByte(pin: pin, byte: r)
+		iLEDSendByte(pin: pin, byte: g)
+		iLEDSendByte(pin: pin, byte: b)
 	}
 }
 
