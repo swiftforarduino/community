@@ -1,0 +1,3 @@
+// Converted from old format.
+PROGMEM_STRING(Button0, "Button Pressed")
+PROGMEM_STRING(Button1, "Button Released")
