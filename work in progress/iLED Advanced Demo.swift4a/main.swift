@@ -30,7 +30,8 @@ import AVR
 // Hardware constants
 // (match your hardware)
 //----------------------
-let numberPixels: UInt16 = 30
+let numberPixels: UInt16 = 24
+let pixelTypeRGB = false // true = rgb (3 chip) pixels, false = rgbw (4 chip) pixels
 
 //----------------------
 // Pin definitions
@@ -40,7 +41,7 @@ let speedSliderPin: UInt8 = 0
 let hueSliderPin: UInt8 = 1
 let brightnessSliderPin: UInt8 = 2
 let button1Pin: UInt8 = 2
-let rgbLEDPin: UInt8 = 13
+let iLEDPin: UInt8 = 13
 
 //----------------------
 // Pin setup
@@ -49,19 +50,19 @@ pinMode(pin: speedSliderPin, mode: INPUT)
 pinMode(pin: hueSliderPin, mode: INPUT)
 pinMode(pin: brightnessSliderPin, mode: INPUT)
 pinMode(pin: button1Pin, mode: INPUT)
-pinMode(pin: rgbLEDPin, mode: OUTPUT)
+pinMode(pin: iLEDPin, mode: OUTPUT)
 
 //----------------------
 // Types
 //----------------------
-typealias RGBColor = (r: UInt8, g: UInt8, b: UInt8)
+typealias Color = (r: UInt8, g: UInt8, b: UInt8, w: UInt8)
 typealias HSVColor = (h: UInt8, s: UInt8, v: UInt8)
 typealias LEDInstruction = (isOn: Bool, count: UInt16)
 
 //----------------------
 // Constants
 //----------------------
-let offColor = RGBColor(0, 0, 0)
+let offColor = Color(0, 0, 0, 0)
 let iLEDLatchDelayMicroseconds: UInt16 = 6
 
 //----------------------
@@ -74,7 +75,7 @@ var globalHue: UInt8 = 0                  // Set by potentiometer position
 var globalBrightness: UInt8 = 0           // Set by potentiometer position
 var globalSaturation: UInt8 = 255         // Fixed at fully saturated for this demo
 var globalColorNeedsUpdate: Bool = true   // Flag indicating HSB to RGB color conversion is needed
-var globalColor: RGBColor = offColor      // Color is calculated from hue, saturation, and brightness
+var globalColor: Color = offColor         // Color is calculated from hue, saturation, and brightness
 
 // Potentiometers are read one at a time, in sequence
 // sliderReadState keeps track of this process
@@ -97,7 +98,7 @@ var buttonWasProcessed = false
 //-------------------------------------------------------------------------------
 // Color Space Conversion
 //-------------------------------------------------------------------------------
-func hsvToRGBColor(_ hsv: HSVColor) -> RGBColor {
+func hsvToColor(_ hsv: HSVColor) -> Color {
 
     var region: UInt16
     var remainder: UInt16
@@ -107,7 +108,12 @@ func hsvToRGBColor(_ hsv: HSVColor) -> RGBColor {
 
     // Completely desaturated?
     if (hsv.s == 0) {
-        return RGBColor(hsv.v, hsv.v, hsv.v)
+
+        if pixelTypeRGB {
+            return Color(0, 0, 0, hsv.v)
+        }
+
+        return Color(hsv.v, hsv.v, hsv.v, 0)
     }
 
     let hsvH16: UInt16 = UInt16(hsv.h)
@@ -157,15 +163,28 @@ func hsvToRGBColor(_ hsv: HSVColor) -> RGBColor {
         rgbB16 = q
     }
 
-    let rgbColor: RGBColor = (UInt8(truncatingBitPattern: rgbR16 / 4),
-                              UInt8(truncatingBitPattern: rgbG16 / 4),
-                              UInt8(truncatingBitPattern: rgbB16 / 4))
+    let red = UInt8(truncatingBitPattern: rgbR16 / 4)
+    let green = UInt8(truncatingBitPattern: rgbG16 / 4)
+    let blue = UInt8(truncatingBitPattern: rgbB16 / 4)
 
-    return rgbColor
+    let color: Color
+
+    // If we are using 4 chip leds and all color components are equal
+    if !pixelTypeRGB,
+        red == green,
+        green == blue {
+            // Use a shade of white
+            color = Color(0, 0, 0, red)
+    }
+    else {
+        color = Color(red, green, blue, 0)
+    }
+
+    return color
 }
 
 //-------------------------------------------------------------------------------
-func RGBToHSVColor(_ rgb: RGBColor) -> HSVColor {
+func RGBToHSVColor(_ rgb: Color) -> HSVColor {
 
     var hsv: HSVColor
     var rgbMin: UInt8
@@ -208,10 +227,10 @@ func RGBToHSVColor(_ rgb: RGBColor) -> HSVColor {
 //-------------------------------------------------------------------------------
 // Manage Potentiometers
 //-------------------------------------------------------------------------------
-func getRGBColor() -> RGBColor {
+func getColor() -> Color {
 
     if globalColorNeedsUpdate {
-        globalColor = hsvToRGBColor(HSVColor(globalHue, globalSaturation, globalBrightness))
+        globalColor = hsvToColor(HSVColor(globalHue, globalSaturation, globalBrightness))
         globalColorNeedsUpdate = false
     }
 
@@ -308,10 +327,10 @@ func manageSliders() {
 //-------------------------------------------------------------------------------
 // iLED Control Functions
 //-------------------------------------------------------------------------------
-func iLEDWriteRGBPixel(pin: UInt8,
-                     color: RGBColor,
-                  grbOrder: Bool = true,
-          latchImmediately: Bool = false) {
+func iLEDWritePixel(pin: UInt8,
+                  color: Color,
+               grbOrder: Bool = true,
+       latchImmediately: Bool = false) {
 
     // This is the basic function for setting a single iLED that has 3 LED chips
     // (red, green, blue). It is normally called many times in succession (once
@@ -329,15 +348,30 @@ func iLEDWriteRGBPixel(pin: UInt8,
     // grbOrder=true will send data: green, red, blue for part Numbers : WS2812, WS2813
     // grbOrder=false will send data: red, green, blue for part Numbers: WS2811, 2818
 
+    let byte1: UInt8
+    let byte2: UInt8
+    let byte3: UInt8
+    let byte4: UInt8
+
     if grbOrder {
-        iLEDSendByte(pin: pin, byte: color.g)
-        iLEDSendByte(pin: pin, byte: color.r)
-        iLEDSendByte(pin: pin, byte: color.b)
+        byte1 = color.g
+        byte2 = color.r
+        byte3 = color.b
+        byte4 = color.w
     }
     else {
-        iLEDSendByte(pin: pin, byte: color.r)
-        iLEDSendByte(pin: pin, byte: color.g)
-        iLEDSendByte(pin: pin, byte: color.b)
+        byte1 = color.r
+        byte2 = color.g
+        byte3 = color.b
+        byte4 = color.w
+    }
+
+    iLEDSendByte(pin: pin, byte: byte1)
+    iLEDSendByte(pin: pin, byte: byte2)
+    iLEDSendByte(pin: pin, byte: byte3)
+
+    if !pixelTypeRGB {
+        iLEDSendByte(pin: pin, byte: byte4)
     }
 
     // Allow time for data to latch if requested
@@ -347,8 +381,8 @@ func iLEDWriteRGBPixel(pin: UInt8,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDShowColor(pin: UInt8 = rgbLEDPin,
-                 color: RGBColor,
+func iLEDShowColor(pin: UInt8 = iLEDPin,
+                 color: Color,
                  count: UInt16 = numberPixels,
               grbOrder: Bool = true,
       latchImmediately: Bool = true) {
@@ -357,7 +391,7 @@ func iLEDShowColor(pin: UInt8 = rgbLEDPin,
 
     // Display a single color on many pixels
     for _ in 1...count {
-        iLEDWriteRGBPixel(pin: pin, color: color, grbOrder: grbOrder)
+        iLEDWritePixel(pin: pin, color: color, grbOrder: grbOrder)
     }
 
     if latchImmediately {
@@ -366,7 +400,7 @@ func iLEDShowColor(pin: UInt8 = rgbLEDPin,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDOff(pin: UInt8 = rgbLEDPin,
+func iLEDOff(pin: UInt8 = iLEDPin,
            count: UInt16 = numberPixels,
         grbOrder: Bool = true) {
 
@@ -380,7 +414,7 @@ func iLEDOff(pin: UInt8 = rgbLEDPin,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDColorWipeDynamic(pin: UInt8 = rgbLEDPin,
+func iLEDColorWipeDynamic(pin: UInt8 = iLEDPin,
                         count: UInt16 = numberPixels,
                       reverse: Bool = false,
                      grbOrder: Bool = true) {
@@ -394,19 +428,19 @@ func iLEDColorWipeDynamic(pin: UInt8 = rgbLEDPin,
         // Wipe in reverse order
         for loop: UInt16 in 0...count {
 
-            let color: RGBColor = getRGBColor()
+            let color: Color = getColor()
             let numberLit = count &- loop
             var index: UInt16 = 0
 
             // Turn on pixels from start
             while (index < numberLit) {
-                iLEDWriteRGBPixel(pin: pin, color: color, grbOrder: grbOrder)
+                iLEDWritePixel(pin: pin, color: color, grbOrder: grbOrder)
                 index = index &+ 1
             }
 
             // Turn off the rest of the pixels
             while (index <= count) {
-                iLEDWriteRGBPixel(pin: pin, color: offColor, grbOrder: grbOrder)
+                iLEDWritePixel(pin: pin, color: offColor, grbOrder: grbOrder)
                 index = index &+ 1
             }
 
@@ -417,10 +451,10 @@ func iLEDColorWipeDynamic(pin: UInt8 = rgbLEDPin,
           // Wipe in forward order
         for numberLit: UInt16 in 0..<count {
 
-            let color: RGBColor = getRGBColor()
+            let color: Color = getColor()
             var index: UInt16 = 0
             while (index <= numberLit) {
-                iLEDWriteRGBPixel(pin: pin, color: color, grbOrder: grbOrder)
+                iLEDWritePixel(pin: pin, color: color, grbOrder: grbOrder)
                 index = index &+ 1
             }
 
@@ -458,7 +492,7 @@ func nextLEDInstruction(instruction: LEDInstruction,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDTheaterChase(pin: UInt8 = rgbLEDPin,
+func iLEDTheaterChase(pin: UInt8 = iLEDPin,
                     count: UInt16 = numberPixels,
                  numberOn: UInt16 = 3,
                 numberOff: UInt16 = 3,
@@ -484,14 +518,14 @@ func iLEDTheaterChase(pin: UInt8 = rgbLEDPin,
 
             // Write pixel colored or off
             if instruction.isOn {
-                iLEDWriteRGBPixel(pin: pin,
-                                color: getRGBColor(),
-                             grbOrder: grbOrder)
+                iLEDWritePixel(pin: pin,
+                             color: getColor(),
+                          grbOrder: grbOrder)
             }
             else {
-                iLEDWriteRGBPixel(pin: pin,
-                                color: offColor,
-                             grbOrder: grbOrder)
+                iLEDWritePixel(pin: pin,
+                             color: offColor,
+                          grbOrder: grbOrder)
             }
 
             instruction = nextLEDInstruction(instruction: instruction,
@@ -509,8 +543,8 @@ func iLEDTheaterChase(pin: UInt8 = rgbLEDPin,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDLarsonScanner (pin: UInt8 = rgbLEDPin,
-                      color: RGBColor,
+func iLEDLarsonScanner (pin: UInt8 = iLEDPin,
+                      color: Color,
                       count: UInt16 = numberPixels,
                       delay: UInt16,
                    grbOrder: Bool = true) {
@@ -527,7 +561,7 @@ func iLEDLarsonScanner (pin: UInt8 = rgbLEDPin,
 func simpleColorTest() {
 
     // Light all LEDs in a single color
-    iLEDShowColor(color: getRGBColor())
+    iLEDShowColor(color: getColor())
 }
 
 //-------------------------------------------------------------------------------
