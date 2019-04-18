@@ -3,37 +3,56 @@
 // iLED Simple Demo
 // Swift for Arduino (S4A)
 //
-// Example showing basic control of intelligent or integrated LEDs (NeoPixels)
+// Example illustrating basic support for integrated LEDs (iLEDs),
+// commonly known as NeoPixels.
 //
 // Created by Mark Swanson on 03/19/2019.
-// Copyright © 2019 Mark Swanson. All rights reserved.
 //
 //-------------------------------------------------------------------------------
 
 import AVR
 
 //-------------------------------------------------------------------------------
-// Setup / Functions
+// Setup
 //-------------------------------------------------------------------------------
 
-// -- IMPORTANT --
-// numberPixels must be set to the number of pixels connected
-// rgbLEDPin must be set to the Arduino pin the iLEDs are connect to
+//----------------------
+// Hardware constants
+// (match your hardware)
+//----------------------
 let numberPixels: UInt16 = 30
+
+//----------------------
+// Pin definitions
+// (match your hardware)
+//----------------------
 let rgbLEDPin: UInt8 = 13
 
+//----------------------
+// Pin setup
+//----------------------
 pinMode(pin: rgbLEDPin, mode: OUTPUT)
 
-// Define types
+//----------------------
+// Types
+//----------------------
 typealias RGBColor = (r: UInt8, g: UInt8, b: UInt8)
 typealias LEDInstruction = (isOn: Bool, count: UInt16)
 
-// Predefined Colors
+//----------------------
+// Constants
+//----------------------
 let redColor = RGBColor(255, 0, 0)
 let greenColor = RGBColor(0, 255, 0)
 let blueColor = RGBColor(0, 0, 255)
 let whiteColor = RGBColor(255, 255, 255)
-let blackColor = RGBColor(0, 0, 0)
+let offColor = RGBColor(0, 0, 0)
+let iLEDLatchDelayMicroseconds:UInt16 = 6
+
+//----------------------
+// Variables
+//----------------------
+// none
 
 //-------------------------------------------------------------------------------
 // iLED Control Functions
@@ -43,13 +62,21 @@ func iLEDWriteRGBPixel(pin: UInt8,
                   grbOrder: Bool = true,
           latchImmediately: Bool = false) {
 
-    // This is the basic function for setting a single iLED that has 3 LED chips (red, green, blue)
-
+    // This is the basic function for setting a single iLED that has 3 LED chips
+    // (red, green, blue). It is normally called many times in succession (once
+    // for each pixel in a strip or ring).
+    //
+    // For each successive write, data is pushed the data to next pixel in the
+    // strip so multiple calls write pixels in a strip first to last.
+    //
+    // latchImmediately causes data sent so far to be displayed and resets their
+    // circuitry such that future calls to this function will start writing data
+    // at pixel 0. This flag is rarely set to true. Normally, many calls are made
+    // in a row to send data to pixels and when the program continues doing other
+    // processing, the iLEDS will automatically latch and display (after a 6 uS delay).
+    //
     // grbOrder=true will send data: green, red, blue for part Numbers : WS2812, WS2813
     // grbOrder=false will send data: red, green, blue for part Numbers: WS2811, 2818
-
-    // Each subsequent write pushes the data to next pixel in the strip
-    // so multiple calls write pixels in a strip first to last
 
     if grbOrder {
         iLEDSendByte(pin: pin, byte: color.g)
@@ -64,7 +91,7 @@ func iLEDWriteRGBPixel(pin: UInt8,
 
     // Allow time for data to latch if requested
     if latchImmediately {
-        delay(microseconds: 6)
+        delay(microseconds: iLEDLatchDelayMicroseconds)
     }
 }
 
@@ -72,13 +99,18 @@ func iLEDWriteRGBPixel(pin: UInt8,
 func iLEDShowColor(pin: UInt8 = rgbLEDPin,
                  color: RGBColor,
                  count: UInt16 = numberPixels,
-              grbOrder: Bool = true) {
+              grbOrder: Bool = true,
+      latchImmediately: Bool = true) {
 
     guard count > 0 else { return }
 
     // Display a single color on many pixels
     for _ in 1...count {
         iLEDWriteRGBPixel(pin: pin, color: color, grbOrder: grbOrder)
+    }
+
+    if latchImmediately {
+        delay(microseconds: iLEDLatchDelayMicroseconds)
     }
 }
 
@@ -91,7 +123,7 @@ func iLEDOff(pin: UInt8 = rgbLEDPin,
 
     // Turn off many pixels
     iLEDShowColor(pin: pin,
-                color: blackColor,
+                color: offColor,
                 count: count,
              grbOrder: grbOrder)
 }
@@ -109,7 +141,7 @@ func iLEDColorWipe(pin: UInt8 = rgbLEDPin,
 
     if reverse {
         // Wipe in reverse order
-        for loop: UInt16 in 0...count {
+        for loop in 0...count {
 
             let numberLit = count &- loop
             var index: UInt16 = 0
@@ -122,7 +154,7 @@ func iLEDColorWipe(pin: UInt8 = rgbLEDPin,
 
             // Turn off the rest of the pixels
             while (index <= count) {
-                iLEDWriteRGBPixel(pin: pin, color: blackColor, grbOrder: grbOrder)
+                iLEDWriteRGBPixel(pin: pin, color: offColor, grbOrder: grbOrder)
                 index = index &+ 1
             }
 
@@ -131,7 +163,7 @@ func iLEDColorWipe(pin: UInt8 = rgbLEDPin,
     }
     else {
         // Wipe in forward order
-        for numberLit: UInt16 in 0..<count {
+        for numberLit in 0..<count {
 
             var index: UInt16 = 0
             while (index <= numberLit) {
@@ -181,7 +213,8 @@ func iLEDTheaterChase(pin: UInt8 = rgbLEDPin,
                     delay: UInt16,
                  grbOrder: Bool = true) {
 
-    // Theatre style crawling lights
+    // Theater style crawling lights
+
     guard count > 0 else {
         return
     }
@@ -193,23 +226,31 @@ func iLEDTheaterChase(pin: UInt8 = rgbLEDPin,
     var instruction: LEDInstruction = (isOn: true, count: numberOn)
 
     // Frame is one step in a full sequence
-    for _: UInt16 in 1...totalFrames { // Frame
+    for _ in 1...totalFrames { // Frame
 
         // Write all pixels in each frame
-        for _: UInt16 in 1...count { // Pixel
+        for _ in 1...count { // Pixel
 
             // Write pixel colored or off
             if instruction.isOn {
-                iLEDWriteRGBPixel(pin: pin, color: color, grbOrder: grbOrder)
+                iLEDWriteRGBPixel(pin: pin,
+                                color: color,
+                             grbOrder: grbOrder)
             }
             else {
-                iLEDWriteRGBPixel(pin: pin, color: blackColor, grbOrder: grbOrder)
+                iLEDWriteRGBPixel(pin: pin,
+                                color: offColor,
+                             grbOrder: grbOrder)
             }
 
-            instruction = nextLEDInstruction(instruction: instruction, numberOn: numberOn, numberOff: numberOff)
+            instruction = nextLEDInstruction(instruction: instruction,
+                                                numberOn: numberOn,
+                                               numberOff: numberOff)
         }
 
-        instruction = nextLEDInstruction(instruction: instruction, numberOn: numberOn, numberOff: numberOff)
+        instruction = nextLEDInstruction(instruction: instruction,
+                                            numberOn: numberOn,
+                                           numberOff: numberOff)
 
         // Delay between frames
         wait(ms: delay)
@@ -239,6 +280,42 @@ func testColor() {
     // All white
     iLEDShowColor(color: whiteColor)
     delay(milliseconds: pixelTimingDelay)
+}
+
+//-------------------------------------------------------------------------------
+func testRandomColors() {
+
+    // Turn all pixels on instantly with random colors
+
+    let timingDelay: UInt16 = 250
+
+    // Seed the random number generator
+    let value = slowAnalogRead(pin: 2)
+    srandom(seed: value)
+
+    for _ in 1...20 {
+
+        let random4 = longRandom4()
+
+        // Assign color components
+        var red = random4.byte1
+        var green = random4.byte2
+        var blue = random4.byte3
+
+        // Knock out one component so we aren't getting a shade of white
+        switch random4.byte4 {
+        case 0...84:
+            blue = 0
+        case 85...168:
+            green = 0
+        default:
+            red = 0
+        }
+
+        let randomColor = RGBColor(red, green, blue)
+        iLEDShowColor(color: randomColor)
+        delay(milliseconds: timingDelay)
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -384,21 +461,23 @@ func testTheaterChase() {
 // Final Setup
 //-------------------------------------------------------------------------------
 
-// All LEDs off
-iLEDOff()
-delay(milliseconds: 1000)
+delay(milliseconds: 100)  // Allow iLED chips to wake up and stabliize
+iLEDOff()                 // All iLEDs off
+delay(milliseconds: 1000) // Wait a bit
 
 //-------------------------------------------------------------------------------
 // Main Loop
 //-------------------------------------------------------------------------------
 while(true) {
 
+    // Run demos
     testColor()
+    testRandomColors()
     testColorFade()
     testColorWipe()
     testTheaterChase()
 
-    delay(milliseconds: 1)
+    delay(milliseconds: 100)
 }
 
 //-------------------------------------------------------------------------------
