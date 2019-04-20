@@ -1,7 +1,7 @@
 import AVR
 
 public private(set) var currentServoAngle: UInt8 = 0
-private var servoControlPin = 0
+private var servoControlPin: UInt8 = 0
 private var microseconds: UInt16 = 0
 
 // Start a servo and set initial angle
