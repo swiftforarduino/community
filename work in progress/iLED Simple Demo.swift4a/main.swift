@@ -20,8 +20,8 @@ import AVR
 // Hardware constants
 // (match your hardware)
 //----------------------
-let numberPixels: UInt16 = 24
-let pixelTypeRGB = false // true = rgb (3 chip) pixels, false = rgbw (4 chip) pixels
+let numberPixels: UInt16 = 30
+let pixelTypeRGB = true // true = rgb (3 chip) pixels, false = rgbw (4 chip) pixels
 
 //----------------------
 // Pin definitions
@@ -281,6 +281,106 @@ func iLEDTheaterChase(pin: UInt8 = iLEDPin,
 }
 
 //-------------------------------------------------------------------------------
+func iLEDSegmentScan(pin: UInt8 = iLEDPin,
+                   color: Color,
+                   count: UInt16 = numberPixels,
+            segmentCount: UInt16,
+                   delay: UInt16,
+                 reverse: Bool,
+                grbOrder: Bool = true) {
+
+    guard count > 0,
+        segmentCount <= count else {
+        return
+    }
+
+    var instruction: LEDInstruction
+
+    // From one end to the other
+    let totalFrames: UInt16 = count &- segmentCount &+ 1
+
+    // One frame = all leds drawn
+    for frame in 0..<totalFrames {
+
+        let offBeforeEye: UInt16
+        let offAfterEye: UInt16
+
+        if reverse {
+            // Reverse
+            offAfterEye = frame
+            offBeforeEye = count &- segmentCount &- offAfterEye
+        }
+        else {
+            // Forward
+            offBeforeEye = frame
+            offAfterEye = count &- segmentCount &- offBeforeEye
+        }
+
+        // If first frame going forward, or last frame going in  reverse
+        if (reverse && frame == totalFrames &- 1) ||
+            (!reverse && frame == 0) {
+            instruction = (isOn: true, count: segmentCount)
+        }
+        else {
+            instruction = (isOn: false, count: offBeforeEye)
+        }
+
+        // Write all pixels in each frame
+        for _ in 0..<count { // Each pixel
+
+            // Write pixel colored or off
+            if instruction.isOn {
+                iLEDWritePixel(pin: pin,
+                             color: color,
+                          grbOrder: grbOrder)
+            }
+            else {
+                iLEDWritePixel(pin: pin,
+                             color: offColor,
+                          grbOrder: grbOrder)
+            }
+
+            instruction = nextLEDInstruction(instruction: instruction,
+                                                numberOn: segmentCount,
+                                               numberOff: offAfterEye)
+        }
+
+        // Delay between frames
+        let centerFrame: UInt16 = totalFrames / 2
+        let framesFromCenter: Int16 = abs(Int16(centerFrame) &- Int16(frame))
+        let framesFromEnd: UInt16 = centerFrame &- UInt16(framesFromCenter)
+        let addedDelayMilliseconds: UInt16 = (framesFromEnd / 2) * delay
+        let totalDelay: UInt16 = delay + addedDelayMilliseconds
+        wait(ms: totalDelay)
+    }
+}
+
+//-------------------------------------------------------------------------------
+func iLEDLarsonScanner(pin: UInt8 = iLEDPin,
+                     color: Color,
+                     count: UInt16 = numberPixels,
+                  eyeCount: UInt16,
+                     delay: UInt16,
+                  grbOrder: Bool = true) {
+
+    // Battlestar Galactica inspired back and forth scanning
+    // https://www.instructables.com/id/Build-the-Ultimate-Larson-Scanner/
+
+    // One call to this function will "scan" from first pixel to the last
+    // and reverse bacl last to first.
+
+    // eyeCount determines the width (in pixels) of "the eye"
+
+    guard count > 0,
+        eyeCount <= count else {
+        return
+    }
+
+    iLEDSegmentScan(color: color, segmentCount: eyeCount, delay: delay, reverse: false)
+    iLEDSegmentScan(color: color, segmentCount: eyeCount, delay: delay, reverse: true)
+}
+
+//-------------------------------------------------------------------------------
 // LED Test Functions
 //-------------------------------------------------------------------------------
 func testColor() {
@@ -481,6 +581,15 @@ func testTheaterChase() {
 }
 
 //-------------------------------------------------------------------------------
+func testLarsonScanner() {
+
+    iLEDLarsonScanner(color: redColor, eyeCount: 3, delay: 10)
+    iLEDLarsonScanner(color: greenColor, eyeCount: 3, delay: 10)
+    iLEDLarsonScanner(color: blueColor, eyeCount: 3, delay: 10)
+    iLEDLarsonScanner(color: whiteColor, eyeCount: 3, delay: 10)
+}
+
+//-------------------------------------------------------------------------------
 // Final Setup
 //-------------------------------------------------------------------------------
 
@@ -499,6 +608,7 @@ while(true) {
     testColorFade()
     testColorWipe()
     testTheaterChase()
+    testLarsonScanner()
 
     delay(milliseconds: 100)
 }

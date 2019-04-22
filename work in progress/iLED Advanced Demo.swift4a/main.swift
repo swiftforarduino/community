@@ -13,10 +13,6 @@
 /*
     TODO:
 
-    Find balance between slider read responsivesness and interferring with running
-    test. If read too often, Theater Chase can be a bit choppy, if read too infrequently
-    color changes lag behind user input.
-
     Consider having a button press fire and interrupt so mode change happens immediately.
 */
 
@@ -30,8 +26,8 @@ import AVR
 // Hardware constants
 // (match your hardware)
 //----------------------
-let numberPixels: UInt16 = 24
-let pixelTypeRGB = false // true = rgb (3 chip) pixels, false = rgbw (4 chip) pixels
+let numberPixels: UInt16 = 30
+let pixelTypeRGB = true // true = rgb (3 chip) pixels, false = rgbw (4 chip) pixels
 
 //----------------------
 // Pin definitions
@@ -85,12 +81,14 @@ var globalColor: Color = offColor         // Color is calculated from hue, satur
 // 3 = Reading brightness
 // 4 = Ready to read speed
 // 5 = Reading speed
+// 6 = All sliders have been read
 var sliderReadState: UInt8 = 0
+let lastSliderState: UInt8 = 6
 
 // Track progress through the demo
 var currentDemoState: UInt8 = 0
 let firstDemoState: UInt8 = 0
-let lastDemoState: UInt8 = 2
+let lastDemoState: UInt8 = 3
 
 // Track button processing
 var buttonWasProcessed = false
@@ -277,13 +275,10 @@ func readHueAsync() {
 //-------------------------------------------------------------------------------
 func nextSliderState() {
 
+    guard sliderReadState < lastSliderState else { return }
+
     // Advance state
     sliderReadState = sliderReadState &+ 1
-
-    // If past final state, start over
-    if sliderReadState > 5 {
-        sliderReadState = 0
-    }
 }
 
 //-------------------------------------------------------------------------------
@@ -468,7 +463,7 @@ func nextLEDInstruction(instruction: LEDInstruction,
                            numberOn: UInt16,
                           numberOff: UInt16) -> LEDInstruction {
 
-    // Used by TheaterChase
+    // Used by TheaterChase and larson scanner
     var newInstruction: LEDInstruction = instruction
 
     newInstruction.count = newInstruction.count &- 1
@@ -500,7 +495,8 @@ func iLEDTheaterChase(pin: UInt8 = iLEDPin,
 
     // Theatre style crawling lights
 
-    guard count > 0 else {
+    guard count > 0,
+        numberOn + numberOff <= count else {
         return
     }
 
@@ -543,16 +539,100 @@ func iLEDTheaterChase(pin: UInt8 = iLEDPin,
 }
 
 //-------------------------------------------------------------------------------
-func iLEDLarsonScanner (pin: UInt8 = iLEDPin,
-                      color: Color,
-                      count: UInt16 = numberPixels,
-                      delay: UInt16,
-                   grbOrder: Bool = true) {
+func iLEDSegmentScan(pin: UInt8 = iLEDPin,
+                   count: UInt16 = numberPixels,
+            segmentCount: UInt16,
+                 reverse: Bool,
+                grbOrder: Bool = true) {
+
+    guard count > 0,
+        segmentCount <= count else {
+        return
+    }
+
+    var instruction: LEDInstruction
+
+    // From one end to the other
+    let totalFrames: UInt16 = count &- segmentCount &+ 1
+
+    // One frame = all leds drawn
+    for frame in 0..<totalFrames {
+
+        let offBeforeEye: UInt16
+        let offAfterEye: UInt16
+
+        if reverse {
+            // Reverse
+            offAfterEye = frame
+            offBeforeEye = count &- segmentCount &- offAfterEye
+        }
+        else {
+            // Forward
+            offBeforeEye = frame
+            offAfterEye = count &- segmentCount &- offBeforeEye
+        }
+
+        // If first frame going forward, or last frame going in  reverse
+        if (reverse && frame == totalFrames &- 1) ||
+            (!reverse && frame == 0) {
+            instruction = (isOn: true, count: segmentCount)
+        }
+        else {
+            instruction = (isOn: false, count: offBeforeEye)
+        }
+
+        // Write all pixels in each frame
+        for _ in 0..<count { // Each pixel
+
+            // Write pixel colored or off
+            if instruction.isOn {
+                iLEDWritePixel(pin: pin,
+                             color: getColor(),
+                          grbOrder: grbOrder)
+            }
+            else {
+                iLEDWritePixel(pin: pin,
+                             color: offColor,
+                          grbOrder: grbOrder)
+            }
+
+            instruction = nextLEDInstruction(instruction: instruction,
+                                                numberOn: segmentCount,
+                                               numberOff: offAfterEye)
+        }
+
+        // Delay between frames
+        let centerFrame: UInt16 = totalFrames / 2
+        let framesFromCenter: Int16 = abs(Int16(centerFrame) &- Int16(frame))
+        let framesFromEnd: UInt16 = centerFrame &- UInt16(framesFromCenter)
+        let delay: UInt16 = globalDelay / 50
+        let addedDelayMilliseconds: UInt16 = (framesFromEnd / 2) * delay
+        let totalDelay: UInt16 = delay + addedDelayMilliseconds
+        wait(ms: totalDelay)
+    }
+}
+
+//-------------------------------------------------------------------------------
+func iLEDLarsonScanner(pin: UInt8 = iLEDPin,
+                     count: UInt16 = numberPixels,
+                  eyeCount: UInt16,
+                  grbOrder: Bool = true) {
 
     // Battlestar Galactica inspired back and forth scanning
     // https://www.instructables.com/id/Build-the-Ultimate-Larson-Scanner/
 
-    // TODO: Implement
+    // One call to this function will "scan" from first pixel to the last
+    // and reverse bacl last to first.
+
+    // eyeCount determines the width (in pixels) of "the eye"
+
+    guard count > 0,
+        eyeCount <= count else {
+        return
+    }
+
+    iLEDSegmentScan(segmentCount: eyeCount, reverse: false)
+    iLEDSegmentScan(segmentCount: eyeCount, reverse: true)
 }
 
 //-------------------------------------------------------------------------------
@@ -581,7 +661,14 @@ func theaterChaseTest() {
 }
 
 //-------------------------------------------------------------------------------
-// Demo State
+func larsonScannerTest() {
+
+    // Pixels chase down strip
+    iLEDLarsonScanner(eyeCount: 3)
+}
+
+//-------------------------------------------------------------------------------
+// Demo
 //-------------------------------------------------------------------------------
 func advanceDemoState() {
 
@@ -596,22 +683,40 @@ func advanceDemoState() {
 }
 
 //-------------------------------------------------------------------------------
+func readAllSliders() {
+
+    // Start reading first slider
+    sliderReadState = 0
+
+    // Start periodic interrupt to read all sliders
+    setupTimerIntervalInterruptCallback(tenthsOfAMillisecond: 10) {
+        manageSliders()
+    }
+
+    // Wait until all sliders have been read
+    while sliderReadState < lastSliderState {
+        delay(milliseconds: 1)
+    }
+
+    // Turn off periodic interrupts
+    clearTimerIntervalInterruptCallback()
+}
+
+//-------------------------------------------------------------------------------
 // Final Setup
 //-------------------------------------------------------------------------------
 
-delay(milliseconds: 100)  // Allow iLED chips to wake up and stabliize
+delay(milliseconds: 100)  // Allow iLED chips to wake up and stabliize before sending data to them
 iLEDOff()                 // All iLEDs off
 delay(milliseconds: 1000) // Wait a bit
-
-// Start repeating interrupt to process sliders (fires every 10ms)
-setupTimerIntervalInterruptCallback(tenthsOfAMillisecond: 1000) {
-    manageSliders()
-}
 
 //-------------------------------------------------------------------------------
 // Main Loop
 //-------------------------------------------------------------------------------
 while(true) {
+
+    // Get all parameters for tests
+    readAllSliders()
 
     // Read the button
     let buttonPressed = digitalRead(pin: button1Pin)
@@ -646,11 +751,13 @@ while(true) {
         theaterChaseTest()
         break
 
+        case 3:
+        larsonScannerTest()
+        break
+
         default:
         break
     }
-
-    delay(milliseconds: 1)
 }
 
 //-------------------------------------------------------------------------------
