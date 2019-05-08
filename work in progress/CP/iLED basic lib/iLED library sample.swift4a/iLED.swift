@@ -136,7 +136,7 @@ func iLEDWritePixel(color: iLEDColor,
 func iLEDSendBuffer() {
     // iterate through the LED buffer, writing values
     // buffer bytes are as rgbw, regardless of what model of neopixel we're setup to
-    for pixel: Int in Int(0)..<Int(iLEDBufferSize) {
+    for pixel: Int in stride(from: 0, to: iLEDBufferSize, by: Int(4)) {
         let r = iLEDBuffer[pixel]
         let g = iLEDBuffer[pixel &+ 1]
         let b = iLEDBuffer[pixel &+ 2]
@@ -144,6 +144,8 @@ func iLEDSendBuffer() {
         let color: iLEDColor = (r: r, g: g, b: b, w: w)
         iLEDWritePixel(color: color)
     }
+
+    delay(microseconds: iLEDLatchDelayMicroseconds)
 }
 
 func iLEDSetBuffer(pixel: UInt8, color: iLEDColor) {
