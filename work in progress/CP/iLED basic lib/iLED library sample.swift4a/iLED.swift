@@ -29,13 +29,16 @@ typealias iLEDColor = (r: UInt8, g: UInt8, b: UInt8, w: UInt8)
 //----------------------
 // Constants
 //----------------------
-private let redColor = iLEDColor(255, 0, 0, 0)
-private let greenColor = iLEDColor(0, 255, 0, 0)
-private let blueColor = iLEDColor(0, 0, 255, 0)
+let iLEDRedColor = iLEDColor(255, 0, 0, 0)
+let iLEDGreenColor = iLEDColor(0, 255, 0, 0)
+let iLEDBlueColor = iLEDColor(0, 0, 255, 0)
+
 private let rgbWhiteColor = iLEDColor(255, 255, 255, 0)
 private let rgbwWhiteColor = iLEDColor(0, 0, 0, 255)
 private let rgbwSuperWhiteColor = iLEDColor(255, 255, 255, 255)
-private let offColor = iLEDColor(0, 0, 0, 0)
+
+let iLEDOffColor = iLEDColor(0, 0, 0, 0)
+
 private let iLEDLatchDelayMicroseconds:UInt16 = 6
 
 private var iLEDBuffer: UnsafeMutablePointer<UInt8> = {
@@ -72,7 +75,7 @@ func iLEDSetup(
 //----------------------
 // Variables
 //----------------------
-private var whiteColor: iLEDColor {
+var iLEDWhiteColor: iLEDColor {
     if iLEDPixelTypeRGB {
         return rgbWhiteColor
     }

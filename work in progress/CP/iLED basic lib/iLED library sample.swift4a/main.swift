@@ -11,12 +11,18 @@
 //------------------------------------------------------------------------------
 
 import AVR
+typealias IntegerLiteralType = UInt8
 
 //------------------------------------------------------------------------------
 // Setup / Functions
 //------------------------------------------------------------------------------
 
 // Insert code here to setup IO pins, define properties, add functions, etc.
+
+let pin = 4
+iLEDSetup(numberPixels: 60, pixelPin: pin)
+iLEDSetBuffer(pixel: 5, color: iLEDRedColor)
+iLEDSendBuffer()
 
 //------------------------------------------------------------------------------
 // Main Loop
