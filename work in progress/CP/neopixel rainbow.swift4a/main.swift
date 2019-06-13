@@ -37,5 +37,5 @@ delay(ms: 1000)
 
 while(true) {
     rollBuffer()
-    delay(ms: 33)
+    delay(ms: 333)
 }

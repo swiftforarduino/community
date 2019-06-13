@@ -101,3 +101,17 @@ func iLED_AllOff() {
     // Turn off all pixels
     iLED_AllOn(color: iLEDOff)
 }
+
+// for debugging if needed...
+//      print(byte: byte)
+//func signalByPulses(_ count: UInt8) {
+//    var i: UInt8 = 0
+//    while i < count {
+//        digitalWrite(pin: 13, value: HIGH)
+//        delay(milliseconds: 100)
+//        digitalWrite(pin: 13, value: LOW)
+//        delay(milliseconds: 100)
+//        i = i &+ 1
+//    }
+//}
+//
