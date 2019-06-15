@@ -9,6 +9,33 @@ public var pixelCount: UInt8 = 0
 //-------------------------------------------------------------------------------
 // iLED Buffered
 //-------------------------------------------------------------------------------
+public func iLED_Store_Buffer(buffer: UnsafeMutablePointer<iLEDFastColor>) {
+    let byteBufferLength: UInt16 = UInt16(pixelCount) &* 4
+
+    buffer.withMemoryRebound(to: UInt8.self, capacity: Int(byteBufferLength)) { byteBuffer in
+        for i: UInt16 in 0..<byteBufferLength {
+            let byte = byteBuffer[Int(i)]
+            writeEEPROM(address: i, value: byte)
+        }
+    }
+}
+
+
+public func iLED_Restore_Buffer(buffer: UnsafeMutablePointer<iLEDFastColor>) {
+    let byteBufferLength: UInt16 = UInt16(pixelCount) &* 4
+
+    buffer.withMemoryRebound(to: UInt8.self, capacity: Int(byteBufferLength)) { byteBuffer in
+        for i: UInt16 in 0..<byteBufferLength {
+            let byte = readEEPROM(address: i)
+            byteBuffer[Int(i)] = byte
+        }
+    }
+
+    iLEDFastWriteBuffer()
+}
+
+// read buffer from I2C
+
 public func iLED_Setup_Buffered(pin: UInt8,
                                  count: UInt8,
                           hasWhiteChip: Bool,
@@ -100,6 +127,26 @@ public func iLED_AllOn(color: iLEDFastColor) {
 func iLED_AllOff() {
     // Turn off all pixels
     iLED_AllOn(color: iLEDOff)
+}
+
+//-------------------------------------------------------------------------------
+func rollBuffer(buffer: UnsafeMutablePointer<iLEDFastColor>) {
+    let firstPixel = buffer[0]
+
+    for i in 0..<pixelCount {
+        buffer[Int(i)] = buffer[Int(i&+1)]
+    }
+
+    buffer[Int(pixels&-1)] = firstPixel
+    iLEDFastWriteBuffer()
+}
+
+//-------------------------------------------------------------------------------
+let dimRed = iLEDFastMakeColor(red: 10, green: 0, blue: 0, white: 0)
+
+//-------------------------------------------------------------------------------
+func allOnDim() {
+    iLED_AllOn(color: dimRed)
 }
 
 // for debugging if needed...
