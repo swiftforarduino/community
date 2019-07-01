@@ -6,10 +6,8 @@ pinMode(pin: 13, mode: OUTPUT)
 print(message: Happy0)
 
 while(true) {
-  // comment to check crosstalk on editors
   digitalWrite(pin: 13, value: HIGH)
-
-  delay(milliseconds: 1000)
+  delay(milliseconds: 1)
   digitalWrite(pin: 13, value: LOW)
-  delay(milliseconds: 1000)
+  delay(milliseconds: 13)
 }
