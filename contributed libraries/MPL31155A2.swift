@@ -57,6 +57,7 @@ func blockingWaitForStatusFlag(flag: UInt8) {
 }
 
 /* Snippets:
+ {
         "MPL31155A2":[
 
             {"partName":"Setup MPL31155A2",
@@ -75,6 +76,7 @@ func blockingWaitForStatusFlag(flag: UInt8) {
                 "partCode":"let press: Float = blockingGetPressure()"
             }
         ]
+ }
 */
 
 // MPL31155A2 high level functions
