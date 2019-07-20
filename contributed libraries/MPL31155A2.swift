@@ -56,9 +56,30 @@ func blockingWaitForStatusFlag(flag: UInt8) {
   }
 }
 
+/* Snippets:
+        "MPL31155A2":[
+
+            {"partName":"Setup MPL31155A2",
+                "partCode":"// setup I2C with standard parameters\nsetupI2C(speed: 0x47, premultiplier: 0)\n\n// enable the MPL31155A2 sensor for reading oversampled 128x\nblockingCheckSensor()\nblockingSetupSensorFlags()"
+            },
+
+            {"partName":"Get temperature reading",
+                "partCode":"let temp: Float = blockingGetTemperature()"
+            },
+
+            {"partName":"Get altitude reading",
+                "partCode":"let alt: Float = blockingGetAltitude()"
+            },
+
+            {"partName":"Get pressure reading",
+                "partCode":"let press: Float = blockingGetPressure()"
+            }
+        ]
+*/
 
 // MPL31155A2 high level functions
-func blockingGetAltitude() -> Float {
+/// Get the current altitude from a running sensor.
+public func blockingGetAltitude() -> Float {
 	let slaveAddress: UInt8 = 0x60
 	let pressureDataReadyFlag: UInt8 = 0x04
 
@@ -73,7 +94,8 @@ func blockingGetAltitude() -> Float {
   }
 }
 
-func blockingGetPressure() -> Float {
+/// Get the current pressure from a running sensor.
+public func blockingGetPressure() -> Float {
 	let slaveAddress: UInt8 = 0x60
 	let pressureDataReadyFlag: UInt8 = 0x04
 
@@ -88,7 +110,8 @@ func blockingGetPressure() -> Float {
   }
 }
 
-func blockingGetTemperature() -> Float {
+/// Get the current temperature from a running sensor.
+public func blockingGetTemperature() -> Float {
 	let slaveAddress: UInt8 = 0x60
 	let temperatureDataReadyFlag: UInt8 = 0x02
 
@@ -104,14 +127,16 @@ func blockingGetTemperature() -> Float {
   }
 }
 
-func blockingCheckSensor() -> Bool {
+/// Once I2C has been set up, check that the sensor is available and connected.
+public func blockingCheckSensor() -> Bool {
 	let slaveAddress: UInt8 = 0x60
 
   let whoami = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0x0C)
   return whoami == 0xC4
 }
 
-func blockingSetupSensorFlags() {
+/// When I2C is running and we are sure the sensor is present, setup standard flags.
+public func blockingSetupSensorFlags() {
 	let slaveAddress: UInt8 = 0x60
 
   blockingWriteSingleI2CRegister(slaveAddress: slaveAddress, register: 0x13, value: 0x07) // set all flags enabled for data retrieval
