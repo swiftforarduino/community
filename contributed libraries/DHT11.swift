@@ -11,7 +11,7 @@ import AVR
  {
         "DHT11":[
             {"partName":"Read Temperature and Humidity",
-                "partCode":"let reading: (temperature: Int8, humidity: Int8) = readValues(pin: 2)"
+                "partCode":"let reading: (temperature: Int8, humidity: Int8, isValid: Bool) = readValues(pin: 2)"
             }
         ]
  }
