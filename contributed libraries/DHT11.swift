@@ -7,6 +7,17 @@
 
 import AVR
 
+/* Snippets:
+ {
+        "DHT11":[
+            {"partName":"Read Temperature and Humidity",
+                "partCode":"let reading: (temperature: Int8, humidity: Int8) = readValues(pin: 2)"
+            }
+        ]
+ }
+
+*/
+
 typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
 
 // as we don't have complex types (struct, enum, error) in the v1 compiler series
