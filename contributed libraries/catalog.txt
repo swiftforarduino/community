@@ -3,3 +3,4 @@ rotaryEncoder.swift
 servo.swift
 stepper-28BYJ-48.swift
 iLEDHelpers.swift
+DHT11.swift
