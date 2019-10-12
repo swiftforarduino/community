@@ -24,6 +24,12 @@ PROGMEM_STRING(Timeout3, "Timeout2")
 PROGMEM_STRING(Read0, "Read failure")
 
 PROGMEM_STRING(temp0, "t(C): ")
+PROGMEM_STRING(temp1, "t(C) * 10 : ")
 
 PROGMEM_STRING(humidity1, ", h(%): ")
+PROGMEM_STRING(humidity2, ", h(%) * 10 : ")
+
+PROGMEM_STRING(Temperature0, "Temperature (C) :")
+
+PROGMEM_STRING(Humidity1, "Humidity (%) :")
 

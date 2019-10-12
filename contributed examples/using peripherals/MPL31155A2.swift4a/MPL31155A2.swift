@@ -41,13 +41,13 @@ func readTemperatureBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
 }
 
 func blockingWriteControlReg1(value: UInt8) {
-	let slaveAddress: UInt8 = 0x60
+    let slaveAddress: UInt8 = 0x60
 
   blockingWriteSingleI2CRegister(slaveAddress: slaveAddress, register: 0x26, value: value)
 }
 
 func blockingWaitForStatusFlag(flag: UInt8) {
-	let slaveAddress: UInt8 = 0x60
+    let slaveAddress: UInt8 = 0x60
 
   var status = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0)
   while status & flag == 0 {
@@ -59,8 +59,8 @@ func blockingWaitForStatusFlag(flag: UInt8) {
 
 // MPL31155A2 high level functions
 func blockingGetAltitude() -> Float {
-	let slaveAddress: UInt8 = 0x60
-	let pressureDataReadyFlag: UInt8 = 0x04
+    let slaveAddress: UInt8 = 0x60
+    let pressureDataReadyFlag: UInt8 = 0x04
 
   // start the altimeter, turn on the analog systems, ADC, and set oversampling rate to 128x, read as altitude
   blockingWriteControlReg1(value: 0xB9)
@@ -74,8 +74,8 @@ func blockingGetAltitude() -> Float {
 }
 
 func blockingGetPressure() -> Float {
-	let slaveAddress: UInt8 = 0x60
-	let pressureDataReadyFlag: UInt8 = 0x04
+    let slaveAddress: UInt8 = 0x60
+    let pressureDataReadyFlag: UInt8 = 0x04
 
   // start the altimeter, turn on the analog systems, ADC, and set oversampling rate to 128x, read as pressure
   blockingWriteControlReg1(value: 0x39)
@@ -89,8 +89,8 @@ func blockingGetPressure() -> Float {
 }
 
 func blockingGetTemperature() -> Float {
-	let slaveAddress: UInt8 = 0x60
-	let temperatureDataReadyFlag: UInt8 = 0x02
+    let slaveAddress: UInt8 = 0x60
+    let temperatureDataReadyFlag: UInt8 = 0x02
 
   // start the altimeter, turn on the analog systems, ADC, and set oversampling rate to 128x
 
@@ -105,14 +105,14 @@ func blockingGetTemperature() -> Float {
 }
 
 func blockingCheckSensor() -> Bool {
-	let slaveAddress: UInt8 = 0x60
+    let slaveAddress: UInt8 = 0x60
 
   let whoami = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0x0C)
   return whoami == 0xC4
 }
 
 func blockingSetupSensorFlags() {
-	let slaveAddress: UInt8 = 0x60
+    let slaveAddress: UInt8 = 0x60
 
   blockingWriteSingleI2CRegister(slaveAddress: slaveAddress, register: 0x13, value: 0x07) // set all flags enabled for data retrieval
 }

@@ -8,6 +8,8 @@
 import AVR
 
 typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
+// values are x10, float from int conversion not working in current avr backend build...
+typealias TempHumidityValues22 = (temperature: Int16, humidity: Int16, isValid: Bool)
 
 // as we don't have complex types (struct, enum, error) in the v1 compiler series
 // we use a tuple to return information
@@ -50,15 +52,15 @@ func readBit(pin: UInt8) -> (bitValue: Bool, isValid: Bool) {
     return (secondPart.0 > 10, true)
 }
 
-func readByte(pin: UInt8) -> (byteValue: Int8, isValid: Bool) {
-    var collector: Int8 = 0
+func readByte(pin: UInt8) -> (byteValue: UInt8, isValid: Bool) {
+    var collector: UInt8 = 0
     var isValid = true
     var bitNumber = 0
 
     while bitNumber < 8 {
         collector = collector << 1
         let bit = readBit(pin: pin)
-        let bitValue: Int8 = bit.0 ? 1 : 0
+        let bitValue: UInt8 = bit.0 ? 1 : 0
         isValid = isValid && bit.1
         collector = collector | bitValue
         bitNumber = bitNumber &+ 1
@@ -67,7 +69,7 @@ func readByte(pin: UInt8) -> (byteValue: Int8, isValid: Bool) {
     return (collector, isValid)
 }
 
-func readValues(pin: UInt8) -> TempHumidityValues {
+func readValueBytesRaw(pin: UInt8) -> (UInt8, UInt8, UInt8, UInt8, UInt8, isValid: Bool) {
     // setup and send sensor read signal
     pinMode(pin: pin, mode: OUTPUT)
     digitalWrite(pin: pin, value: HIGH)
@@ -90,9 +92,42 @@ func readValues(pin: UInt8) -> TempHumidityValues {
 
     let isValid = byte1.1 && byte2.1 && byte3.1 && byte4.1 && byte5.1
 
-    if isValid {
-        return (byte3.0, byte1.0, true)
+    return (byte1.0, byte2.0, byte3.0, byte4.0, byte5.0, isValid: isValid)
+}
+
+func readValues(pin: UInt8) -> TempHumidityValues {
+    let bytes = readValueBytesRaw(pin: pin)
+    let checksum = bytes.0 &+ bytes.1 &+ bytes.2 &+ bytes.3
+
+    if bytes.isValid, checksum == bytes.4 {
+        return (Int8(bitPattern: bytes.2 & 0x7F), Int8(bitPattern: bytes.0 & 0x7F), true)
     } else {
         return (-100, -100, false)
     }
 }
+
+func readValuesDHT22(pin: UInt8) -> TempHumidityValues22 {
+    let bytes = readValueBytesRaw(pin: pin)
+    let checksum = bytes.0 &+ bytes.1 &+ bytes.2 &+ bytes.3
+
+    if bytes.isValid, checksum == bytes.4 {
+        let humidityHi = Int16(bytes.0) << 8
+        let humidityLo = Int16(bytes.1)
+
+        let tempHi = Int16(bytes.2 & 0x7F) << 8
+        let tempLow = Int16(bytes.3)
+
+        let tempNegative = bytes.2 & 0x80 == 0x80
+        let temperature = tempHi &+ tempLow
+        let humidity = humidityHi &+ humidityLo
+
+        if tempNegative {
+            return (-temperature, humidity, true)
+        } else {
+            return (temperature, humidity, true)
+        }
+    } else {
+        return (-100, -100, false)
+    }
+}
+
