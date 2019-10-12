@@ -17,7 +17,7 @@ while(true) {
   }
 
   reverseDirection()
-  
+
   print(message: Reversing1)
 }
 

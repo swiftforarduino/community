@@ -91,7 +91,7 @@ private func setMotorCoils() {
         digitalWrite(pin: IN2, value: LOW)
         digitalWrite(pin: IN3, value: LOW)
         digitalWrite(pin: IN4, value: HIGH)
-        
+
       default:
         break
 
@@ -102,7 +102,7 @@ private func step() {
 
   if forward {
     currentStep = currentStep &+ 1
-    
+
     if currentStep > 7 {
       currentStep = 0
     }
