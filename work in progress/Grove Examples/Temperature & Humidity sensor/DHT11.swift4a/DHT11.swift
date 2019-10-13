@@ -7,6 +7,22 @@
 
 import AVR
 
+/* Snippets:
+ {
+        "DHT11":[
+            {"partName":"Read Temperature and Humidity",
+                "partCode":"let reading: (temperature: Int8, humidity: Int8, isValid: Bool) = readValues(pin: 2)"
+            }
+        ],
+        "DHT22":[
+            {"partName":"Read Temperature and Humidity",
+                "partCode":"let reading: (temperatureTimesTen: Int16, humidityTimesTen: Int16, isValid: Bool) = readValues(pin: 2)"
+            }
+        ],
+ }
+
+*/
+
 typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
 // values are x10, float from int conversion not working in current avr backend build...
 typealias TempHumidityValues22 = (temperature: Int16, humidity: Int16, isValid: Bool)
