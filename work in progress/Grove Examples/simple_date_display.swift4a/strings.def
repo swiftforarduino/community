@@ -1,0 +1,51 @@
+//------------------------------------------------------------------------------
+//
+// strings.def
+// Swift For Arduino
+//
+// Strings are placed in here automatically by the IDE.
+// The macro PROGMEM_STRING(symbol,string) records a string for the build that
+// is stored in program memory as an optimisation. Note: at the time of writing
+// this is the only way to handle string constants in S4A.
+//
+// Usually you will not need to edit this file by hand, the IDE will do it for
+// you. If you do change the file by hand, you make break the build, so be careful!
+//
+//------------------------------------------------------------------------------
+
+PROGMEM_STRING(Hours0, "Hours:")
+
+PROGMEM_STRING(Minutes1, "Minutes:")
+
+PROGMEM_STRING(Seconds2, "Seconds:")
+
+PROGMEM_STRING(Starting3, "Starting...")
+
+PROGMEM_STRING(Set4, "Set time")
+
+PROGMEM_STRING(Getting5, "Getting time...")
+
+PROGMEM_STRING(Monday0, "Monday")
+
+PROGMEM_STRING(year0, "year")
+
+PROGMEM_STRING(month1, "month")
+
+PROGMEM_STRING(day2, "day")
+
+PROGMEM_STRING(unknown3, "unknown")
+
+PROGMEM_STRING(Tuesday4, "Tuesday")
+
+PROGMEM_STRING(Wednesday5, "Wednesday")
+
+PROGMEM_STRING(Thursday6, "Thursday")
+
+PROGMEM_STRING(Friday7, "Friday")
+
+PROGMEM_STRING(Saturday8, "Saturday")
+
+PROGMEM_STRING(Sunday9, "Sunday")
+
+PROGMEM_STRING(day10, "day of week")
+

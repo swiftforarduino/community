@@ -20,12 +20,3 @@ while(true) {
 
   print(message: Reversing1)
 }
-
-// cellar... the code was this...
-// but it creates some internal aborts
-// which would probably never be triggered
-// but I'd rather not take the risk...
-//  for i: UInt16 in 0..<4096 {
-//    singleStep()
-//    delay(microseconds: 800)
-// }

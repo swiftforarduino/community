@@ -42,18 +42,17 @@ func readTemperatureBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
 
 func blockingWriteControlReg1(value: UInt8) {
     let slaveAddress: UInt8 = 0x60
-
-  blockingWriteSingleI2CRegister(slaveAddress: slaveAddress, register: 0x26, value: value)
+    blockingWriteSingleI2CRegister(slaveAddress: slaveAddress, register: 0x26, value: value)
 }
 
 func blockingWaitForStatusFlag(flag: UInt8) {
     let slaveAddress: UInt8 = 0x60
 
-  var status = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0)
-  while status & flag == 0 {
-    delay(milliseconds: 10)
-    status = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0)
-  }
+    var status = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0)
+    while status & flag == 0 {
+        delay(milliseconds: 10)
+        status = blockingReadSingleI2CRegister(slaveAddress: slaveAddress, register: 0)
+    }
 }
 
 
@@ -66,11 +65,8 @@ func blockingGetAltitude() -> Float {
   blockingWriteControlReg1(value: 0xB9)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3) {
+    let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
     return readAltitudeBuffer(registerBuffer)
-  } else {
-    return 0
-  }
 }
 
 func blockingGetPressure() -> Float {
@@ -81,11 +77,8 @@ func blockingGetPressure() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3) {
+    let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
     return readPressureBuffer(registerBuffer)
-  } else {
-    return 0
-  }
 }
 
 func blockingGetTemperature() -> Float {
@@ -97,13 +90,11 @@ func blockingGetTemperature() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: temperatureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2) {
-    return readTemperatureBuffer(registerBuffer)
-  } else {
-    return 0
-  }
+  let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2)
+  return readTemperatureBuffer(registerBuffer)
 }
 
+@discardableResult
 func blockingCheckSensor() -> Bool {
     let slaveAddress: UInt8 = 0x60
 
