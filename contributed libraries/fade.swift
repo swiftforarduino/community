@@ -1,5 +1,19 @@
 import AVR
 
+/* Snippets:
+ {
+        "fade":[
+            {"partName":"Fade In",
+                "partCode":"fadeIn(pin: 3, duration: 300)"
+            },
+            {"partName":"Fade Out",
+                "partCode":"fadeOut(pin: 3, duration: 300)"
+            }
+        ],
+ }
+
+*/
+
 func fadeIn(pin: UInt8, duration: UInt16) {
     if duration < 25 {
         analogWrite(pin: pin, value: 255)
