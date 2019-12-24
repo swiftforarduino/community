@@ -16,7 +16,7 @@ import AVR
         ],
         "DHT22":[
             {"partName":"Read Temperature and Humidity",
-                "partCode":"let reading: (temperatureTimesTen: Int16, humidityTimesTen: Int16, isValid: Bool) = readValues(pin: 2)"
+                "partCode":"let reading: (temperatureTimesTen: Int16, humidityTimesTen: Int16, isValid: Bool) = readValuesDHT22(pin: 2)"
             }
         ],
  }
