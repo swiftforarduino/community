@@ -71,7 +71,7 @@ public func iLED_Setup(pin: UInt8,
 
     iLEDFastSetup(
         pin: pin,
-        pixelCount: count,
+        pixelCount: UInt16(count),
         hasWhite: hasWhiteChip,
         grbOrdered: grbDataOrder)
 
