@@ -77,3 +77,15 @@ func ledMatrixStopDisplay() {
 func ledMatrixResetDevice() {
 	Seeed_RGB_LED_Matrix.resetDevice()
 }
+
+/* Snippets:
+ {
+        "RGB LED Matrix":[
+            {"partName":"Show Smiley Face",
+                "partCode":"setupI2C(speed: 0x47, premultiplier: 0)\nledMatrixShow(emojiNumber: 0, durationMs: 1800, forever: true)"
+            }
+        ],
+
+ }
+
+*/
