@@ -3,6 +3,16 @@
 // Libraries: iLEDHelpers.swift
 //------------------------------------------------------------------------------
 
+/*
+Instructions:
+Plug a grove connector into D4 on your lotus board
+Plug the other end into the 10 pixel neopixel strip
+Connect the lotus board to your Mac via USB
+Substitute the value 4 for <pin> in the program if necessary
+From the Advanced Menu, Choose 'Download Libraries' to retrieve community library code
+Build and upload the program
+*/
+
 import AVR
 typealias IntegerLiteralType = Pin
 

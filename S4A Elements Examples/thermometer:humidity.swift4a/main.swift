@@ -3,6 +3,17 @@
 // NOTE: Modifications to the "Libraries:" comment line below will affect the build.
 // Libraries: iLEDHelpers.swift DHT11.swift
 
+/*
+Instructions:
+Plug a grove connector into D4 on your lotus board
+Plug the other end into the 10 pixel neopixel strip
+Plug another grove connector into D2 on your lotus board
+Plug the other end into your temperature/humidity sensor
+Connect the lotus board to your Mac via USB
+From the Advanced Menu, Choose 'Download Libraries' to retrieve community library code
+Build and upload the program"
+*/
+
 import AVR
 typealias IntegerLiteralType = Pin
 

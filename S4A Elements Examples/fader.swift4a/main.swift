@@ -10,6 +10,15 @@
 // Libraries:
 //------------------------------------------------------------------------------
 
+/*
+Instructions:
+Plug a grove connector into D5 on your lotus board
+Plug the other end into the LED board
+Connect the lotus board to your Mac via USB
+From the Advanced Menu, Choose 'Download Libraries' to retrieve community library code
+Build and upload the program
+*/
+
 import AVR
 typealias IntegerLiteralType = Pin
 
