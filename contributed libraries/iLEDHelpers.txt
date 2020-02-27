@@ -18,21 +18,3 @@ public func iLED_AllOn(color: iLEDFastColor)
 //-------------------------------------------------------------------------------
 func iLED_AllOff() 
 
-/* Snippets:
- {
-        "Neopixel Helpers":[
-
-            {"partName":"Setup Neopixel Buffer",
-                "partCode":"let ledPin = 4\nlet pixels = 10\n\nvar buffer = iLED_Setup_Buffered(pin: ledPin, count: pixels, hasWhiteChip: true)\n"
-            },
-
-            {"partName":"Rainbow",
-                "partCode":"func rainbow() {\n    let hueDeltaPerPixel = 255 / pixels\n\n    for i in 0..<pixels {\n        buffer[Int(i)] = iLEDFastMakeColor(hue: i &* hueDeltaPerPixel, saturation: 255, value: 255, white: 0)\n    }\n\n    iLEDFastWriteBuffer()\n}\n\nrainbow()"
-            },
-
-            {"partName":"Roll Buffer",
-                "partCode":"func rollBuffer() {\n    let firstPixel = buffer[0]\n\n    for i in 0..<pixels {\n        buffer[Int(i)] = buffer[Int(i&+1)]\n    }\n\n    buffer[Int(pixels&-1)] = firstPixel\n    iLEDFastWriteBuffer()\n}"
-            }
-        ]
- }
-*/
