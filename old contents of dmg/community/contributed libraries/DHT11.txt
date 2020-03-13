@@ -1,0 +1,19 @@
+// Created by Carl Peto on 06/28/2019.
+// License: MIT license - feel free to copy and use this sample.
+// From Grove parts this allows you to read from the DHT11 or DHT22 sensors.
+typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
+
+// values are x10, float from int conversion not working in current avr backend build...
+typealias TempHumidityValues22 = (temperature: Int16, humidity: Int16, isValid: Bool)
+
+// as we don't have complex types (struct, enum, error) in the v1 compiler series
+// we use a tuple to return information
+// (cyclesUntilLogicStateChanged,LogicStateAtStart,TimedOut)
+// hard to know what to do with timeouts, obviously they "shouldn't" happen
+// but equally obviously the program must not hang if they do
+// we take a best guess of ignoring them and reading them at the opening value
+// which will make garbage data for that read but is better than a hang
+func readValues(pin: UInt8) -> TempHumidityValues 
+
+func readValuesDHT22(pin: UInt8) -> TempHumidityValues22 
+

@@ -1,0 +1,3 @@
+// Converted from old format.
+PROGMEM_STRING(RPM0, "RPM")
+PROGMEM_STRING(Fan1, "Fan RPM Monitor")

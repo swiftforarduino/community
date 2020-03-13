@@ -1,0 +1,3 @@
+
+PROGMEM_STRING(SPI0, "SPI says...")
+

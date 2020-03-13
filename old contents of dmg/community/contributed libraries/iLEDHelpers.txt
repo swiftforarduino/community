@@ -1,0 +1,20 @@
+//----------------------
+// Constants
+//----------------------
+//-------------------------------------------------------------------------------
+// iLED Buffered
+//-------------------------------------------------------------------------------
+public func indicateFail() -> Never 
+
+// when version 2 of the compiler and AVR Lib are finished, will switch on this
+// kind of interface, but it needs more runtime than we currently have available
+// public func iLED_WritePixels(pixels: iLEDFastColor...) {
+// }
+//-------------------------------------------------------------------------------
+// iLED Control Functions
+//-------------------------------------------------------------------------------
+public func iLED_AllOn(color: iLEDFastColor) 
+
+//-------------------------------------------------------------------------------
+func iLED_AllOff() 
+

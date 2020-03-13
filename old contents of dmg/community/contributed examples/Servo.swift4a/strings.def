@@ -1,0 +1,3 @@
+// Converted from old format.
+PROGMEM_STRING(Started0, "Started")
+PROGMEM_STRING(Changed1, "Changed servo angle to:")
