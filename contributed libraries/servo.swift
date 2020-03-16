@@ -32,7 +32,7 @@ func setServoAngle(angle: UInt8) {
 
 private func servoPulseSignal() {
   digitalWrite(pin: servoControlPin, value: HIGH)
-  wait(us: microseconds)
+  delay(us: microseconds)
   digitalWrite(pin: servoControlPin, value: LOW)
 }
 
