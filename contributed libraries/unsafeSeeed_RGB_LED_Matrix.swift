@@ -1,3 +1,13 @@
+// Author: Carl Peto
+// Date: 01/10/2020
+// IDE Version: 3.0
+// Description: This library wraps an underlying legacy C++ library that controls
+// a Seeed Studios RGB LED Matrix display. It is an advanced and complex library
+// that allows you to display emojis, coloured bars,
+// numbers, solid colours and marquee text blocks on the display.
+// (Ideally some day this code should be ported to Swift as all the C++ code does
+// is use the built in S4A AVR functions for I2C communication.)
+
 import Seeed_RGB_LED_Matrix
 
 func ledMatrixShow(number: Int16, durationMs: UInt16, forever: Bool, color: UInt8) {
@@ -84,8 +94,7 @@ func ledMatrixResetDevice() {
             {"partName":"Show Smiley Face",
                 "partCode":"setupI2C(speed: 0x47, premultiplier: 0)\nledMatrixShow(emojiNumber: 0, durationMs: 1800, forever: true)"
             }
-        ],
-
+        ]
  }
 
 */

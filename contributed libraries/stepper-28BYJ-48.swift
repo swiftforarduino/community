@@ -1,9 +1,36 @@
+// Author: Carl Peto
+// Date: 01/28/2019
+// IDE Version: 3.0
+// Description: This library controls a typical stepper motor, a 28BYJ-48 motor.
+// You can use this to control one of these motors, single stepping, reversing, etc.
+// It might work with other motors but is not guaranteed. However you can copy this
+// library code and write your own based on it.
+
+/* Snippets:
+ {
+        "Stepper Motor 28BYJ-48":[
+
+            {"partName":"Setup 28BYJ-48 motor",
+                "partCode":"setupStepper(IN1: D8, IN2: D9, IN3: D10, IN4: D11)"
+            },
+
+            {"partName":"Step through various angles",
+                "partCode":"  var i: UInt16 = 0\nwhile i < 4096 {\nsingleStep()\ndelay(microseconds: 800)\ni = i &+ 1\n}"
+            },
+
+            {"partName":"Reverse step direction",
+                "partCode":"reverseDirection()"
+            }
+        ]
+ }
+*/
+
 import AVR
 
-private(set) var IN1 = 8
-private(set) var IN2 = 9
-private(set) var IN3 = 10
-private(set) var IN4 = 11
+private(set) var IN1 = D8
+private(set) var IN2 = D9
+private(set) var IN3 = D10
+private(set) var IN4 = D11
 
 private var currentStep = 0
 private var forward = true

@@ -1,3 +1,9 @@
+// Author: Carl Peto
+// Date: 07/29/2019
+// IDE Version: 3.0
+// Description: This library gives some extra functions to help you work with
+// intelligent LEDs, i.e. neopixels and similar devices.
+
 import AVR
 
 //----------------------
@@ -36,7 +42,7 @@ public func iLED_Setup_Buffered(pin: UInt8,
         return buffer
     } else {
         iLED_Setup(
-            pin: pin,
+            pin: UInt16(pin),
             count: count,
             hasWhiteChip: hasWhiteChip,
             grbDataOrder: grbDataOrder)
@@ -62,7 +68,7 @@ public func indicateFail() -> Never {
 //-------------------------------------------------------------------------------
 // iLED Control Functions
 //-------------------------------------------------------------------------------
-public func iLED_Setup(pin: UInt8,
+public func iLED_Setup(pin: UInt16,
                      count: UInt8,
               hasWhiteChip: Bool,
               grbDataOrder: Bool = true) {
@@ -108,7 +114,7 @@ func iLED_AllOff() {
         "Neopixel Helpers":[
 
             {"partName":"Setup Neopixel Buffer",
-                "partCode":"let ledPin = 4\nlet pixels = 10\n\nvar buffer = iLED_Setup_Buffered(pin: ledPin, count: pixels, hasWhiteChip: true)\n"
+                "partCode":"let ledPin = D4\nlet pixels = 10\n\nvar buffer = iLED_Setup_Buffered(pin: ledPin, count: pixels, hasWhiteChip: true)\n"
             },
 
             {"partName":"Rainbow",

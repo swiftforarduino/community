@@ -1,13 +1,20 @@
+// Author: Carl Peto
+// Date: 12/17/2019
+// IDE Version: 3.0
+// Description: This gives functions to fade in or out an LED over a number of
+// milliseconds. Note, only pins capable of supporting analogWrite can be used,
+// e.g. 3,5,6,9,10,11 on an Arduino UNO.
+
 import AVR
 
 /* Snippets:
  {
         "fade":[
             {"partName":"Fade In",
-                "partCode":"fadeIn(pin: 3, duration: 300)"
+                "partCode":"fadeIn(pin: D3, duration: 300)"
             },
             {"partName":"Fade Out",
-                "partCode":"fadeOut(pin: 3, duration: 300)"
+                "partCode":"fadeOut(pin: D3, duration: 300)"
             }
         ],
  }

@@ -1,3 +1,9 @@
+// Author: Carl Peto
+// Date: 01/28/2019
+// IDE Version: 3.0
+// Description: This library allows you to read altitude, pressure and temperature
+// on an MPL31155A2 sensor via the I2C bus.
+
 import AVR
 
 // MPL31155A2 low level helper functions

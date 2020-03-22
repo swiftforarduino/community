@@ -1,3 +1,9 @@
+// Author: Carl Peto
+// Date: 08/11/2019
+// IDE Version: 3.0
+// Description: This allows you to write numbers to the Grove alphanumeric two
+// digit display.
+
 import AVR
 
 /* derived from https://github.com/Seeed-Studio/Seeed_Alphanumeric_Display_HT16K33 by Jerry Yip with thanks
@@ -42,6 +48,26 @@ sample of the font for the 2 letter display unit
     0x0428,                 // 'Y'
     0x220c,                 // 'Z'
     0x0000,                 // ilegal num
+
+*/
+
+/* Snippets:
+ {
+        "2 Digit Display":[
+            {"partName":"Start LED Display",
+                "partCode":"let slaveAddress = 0x70\n// setup I2C with standard parameters\nsetupI2C(speed: 0x47, premultiplier: 0)\nenableOscillator(slaveAddress: slaveAddress)\nturnOnLED(slaveAddress: slaveAddress)"
+            },
+            {"partName":"Write 29 to display",
+                "partCode":"blockingWriteGroveDigital2DigitalValue(slaveAddress: 0x70, value: 29)"
+            },
+            {"partName":"Blink display",
+                "partCode":"turnOnLED(slaveAddress: slaveAddress, blink: true)"
+            },
+            {"partName":"Write OK",
+                "partCode":"blockingWriteGroveDigital2DigitDisplay(slaveAddress: slaveAddress, letter1: 0xa145, letter2: 0x0c18)"
+            }
+        ],
+ }
 
 */
 

@@ -1,6 +1,29 @@
+// Author: Carl Peto
+// Date: 08/15/2019
+// IDE Version: 3.0
+// Description: This library allows you to respond to a rotary encoder being
+// turned clockwise or counterclockwise. Note: you need to keep the state of
+// the rotary encoder from one call to the next in order to detect rotation.
+// You use a tuple typed with PinsState to do this.
+
 import AVR
 
 /* To see an example of using the rotary encoder, see the example strobe-fan-sync for how to use it. */
+
+/* Snippets:
+ {
+        "Rotary Encoder":[
+
+            {"partName":"Setup rotary encoder",
+                "partCode":"let rotaryPin1 = D6\nlet rotaryPin2 = D8\nlet centerPin = D7\n// store the state from call to call\nvar lastPinState: PinsState = (false, false, false)\n\npinMode(pin: rotaryPin1, mode: INPUT)\ndigitalWrite(pin: rotaryPin1, value: HIGH)\npinMode(pin: rotaryPin2, mode: INPUT)\ndigitalWrite(pin: rotaryPin2, value: HIGH)\npinMode(pin: centerPin, mode: INPUT)\ndigitalWrite(pin: centerPin, value: HIGH)"
+            },
+
+            {"partName":"Check the rotary pin state",
+                "partCode":"checkRotaryEncoder(\npin1: rotaryPin1,\npin2: rotaryPin2,\ncenterPin: centerPin,\nlastPinState: &lastPinState,\nclockwise: {},\ncounterclockwise: {},\ncenterPinPressed: {})"
+            }
+        ]
+ }
+*/
 
 typealias PinsState = (pin1: Bool, pin2: Bool, centerPin: Bool)
 
