@@ -68,8 +68,8 @@ public func indicateFail() -> Never {
 //-------------------------------------------------------------------------------
 // iLED Control Functions
 //-------------------------------------------------------------------------------
-public func iLED_Setup(pin: UInt16,
-                     count: UInt8,
+public func iLED_Setup(pin: UInt8,
+                     count: UInt16,
               hasWhiteChip: Bool,
               grbDataOrder: Bool = true) {
 
@@ -77,7 +77,7 @@ public func iLED_Setup(pin: UInt16,
 
     iLEDFastSetup(
         pin: pin,
-        pixelCount: UInt16(count),
+        pixelCount: count,
         hasWhite: hasWhiteChip,
         grbOrdered: grbDataOrder)
 

@@ -95,11 +95,8 @@ public func blockingGetAltitude() -> Float {
   blockingWriteControlReg1(value: 0xB9)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3) {
-    return readAltitudeBuffer(registerBuffer)
-  } else {
-    return 0
-  }
+  let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
+  return readAltitudeBuffer(registerBuffer)
 }
 
 /// Get the current pressure from a running sensor.
@@ -111,11 +108,8 @@ public func blockingGetPressure() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3) {
-    return readPressureBuffer(registerBuffer)
-  } else {
-    return 0
-  }
+  let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
+  return readPressureBuffer(registerBuffer)
 }
 
 /// Get the current temperature from a running sensor.
@@ -128,11 +122,8 @@ public func blockingGetTemperature() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: temperatureDataReadyFlag)
 
-  if let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2) {
-    return readTemperatureBuffer(registerBuffer)
-  } else {
-    return 0
-  }
+  let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2)
+  return readTemperatureBuffer(registerBuffer)
 }
 
 /// Once I2C has been set up, check that the sensor is available and connected.
