@@ -10,7 +10,7 @@ import AVR
 // Constants
 //----------------------
 public let iLEDLatchDelayMicroseconds:UInt16 = 6
-public var pixelCount: UInt8 = 0
+public var pixelCount: UInt16 = 0
 
 //-------------------------------------------------------------------------------
 // iLED Buffered
@@ -29,7 +29,7 @@ public func iLED_Setup_Buffered(pin: UInt8,
         hasWhite: hasWhiteChip,
         grbOrdered: grbDataOrder) {
 
-        pixelCount = count
+        pixelCount = UInt16(count)
 
         // Delay to let iLEDs stabilize then turn all off
         delay(milliseconds: 10)
@@ -42,8 +42,8 @@ public func iLED_Setup_Buffered(pin: UInt8,
         return buffer
     } else {
         iLED_Setup(
-            pin: UInt16(pin),
-            count: count,
+            pin: pin,
+            count: UInt16(count),
             hasWhiteChip: hasWhiteChip,
             grbDataOrder: grbDataOrder)
 
