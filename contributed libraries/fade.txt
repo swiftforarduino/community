@@ -1,3 +1,9 @@
+// Author: Carl Peto
+// Date: 12/17/2019
+// IDE Version: 3.0
+// Description: This gives functions to fade in or out an LED over a number of
+// milliseconds. Note, only pins capable of supporting analogWrite can be used,
+// e.g. 3,5,6,9,10,11 on an Arduino UNO.
 func fadeIn(pin: UInt8, duration: UInt16) 
 
 func fadeOut(pin: UInt8, duration: UInt16) 

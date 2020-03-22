@@ -1,3 +1,10 @@
+// Author: Carl Peto
+// Date: 01/28/2019
+// IDE Version: 3.0
+// Description: This library controls a typical stepper motor, a 28BYJ-48 motor.
+// You can use this to control one of these motors, single stepping, reversing, etc.
+// It might work with other motors but is not guaranteed. However you can copy this
+// library code and write your own based on it.
 func setDirection(forward forwardIn: Bool) 
 
 func reverseDirection() 

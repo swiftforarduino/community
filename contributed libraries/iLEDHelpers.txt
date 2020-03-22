@@ -1,3 +1,8 @@
+// Author: Carl Peto
+// Date: 07/29/2019
+// IDE Version: 3.0
+// Description: This library gives some extra functions to help you work with
+// intelligent LEDs, i.e. neopixels and similar devices.
 //----------------------
 // Constants
 //----------------------

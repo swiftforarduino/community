@@ -1,6 +1,8 @@
-// Created by Carl Peto on 06/28/2019.
-// License: MIT license - feel free to copy and use this sample.
-// From Grove parts this allows you to read from the DHT11 or DHT22 sensors.
+// Author: Carl Peto
+// Date: 06/28/2019
+// IDE Version: 3.0
+// Description: This allows you to read from the DHT11 or DHT22 temperature and humidity sensors,
+// such as found in the S4A Elements hardware boxes or the Grove range from Seeed Studios.
 typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
 
 // values are x10, float from int conversion not working in current avr backend build...

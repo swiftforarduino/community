@@ -1,3 +1,8 @@
+// Author: Carl Peto
+// Date: 08/11/2019
+// IDE Version: 3.0
+// Description: This allows you to write numbers to the Grove alphanumeric two
+// digit display.
 /* derived from https://github.com/Seeed-Studio/Seeed_Alphanumeric_Display_HT16K33 by Jerry Yip with thanks
 
 sample of the font for the 2 letter display unit
