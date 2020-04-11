@@ -1,0 +1,34 @@
+/* setup */
+func btStart() -> Bool 
+
+func btReset() -> Bool 
+
+func btSetEcho(on: Bool) 
+
+func btCheckMinimumVersion(version: AVRString) -> Bool 
+
+func btFactoryReset() -> Bool 
+
+/* change/check status/connection */
+func btIsConnected() -> Bool 
+
+func btSetMode(mode: UInt8) -> Bool 
+
+/* commands */
+func btSendCommand(buffer: AVRString) -> Bool 
+
+func btSendCommand(fixedString: AVRString) -> Bool 
+
+func btWaitForOK() -> Bool 
+
+/* transmit/receive data */
+func btPrint(buffer: AVRString, appendNewline: Bool = true) 
+
+func btPrint(fixedString: AVRString, appendNewline: Bool = true) 
+
+func btAvailable() -> UInt16 
+
+func btRead() -> UInt16 
+
+/* GATT services */
+// todo

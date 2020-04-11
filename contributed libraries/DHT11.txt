@@ -6,7 +6,7 @@
 typealias TempHumidityValues = (temperature: Int8, humidity: Int8, isValid: Bool)
 
 // values are x10, float from int conversion not working in current avr backend build...
-typealias TempHumidityValues22 = (temperature: Int16, humidity: Int16, isValid: Bool)
+typealias TempHumidityValues22 = (temperatureTimesTen: Int16, humidityTimesTen: Int16, isValid: Bool)
 
 // as we don't have complex types (struct, enum, error) in the v1 compiler series
 // we use a tuple to return information

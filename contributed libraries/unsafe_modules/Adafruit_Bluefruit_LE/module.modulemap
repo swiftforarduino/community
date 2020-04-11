@@ -1,0 +1,4 @@
+module Adafruit_Bluefruit_LE {
+  header "Adafruit_Bluefruit_LE.h"
+	link "Adafruit_Bluefruit_LE"
+}

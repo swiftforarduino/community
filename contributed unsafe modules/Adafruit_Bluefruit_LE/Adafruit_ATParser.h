@@ -37,15 +37,16 @@
 #ifndef _ADAFRUIT_ATPARSER_H_
 #define _ADAFRUIT_ATPARSER_H_
 
-class __FlashStringHelper;
 #define boolean _Bool
 
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+// #include <cstring.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
+
 #include "Stream.h"
 #include "utility/sdep.h"
 

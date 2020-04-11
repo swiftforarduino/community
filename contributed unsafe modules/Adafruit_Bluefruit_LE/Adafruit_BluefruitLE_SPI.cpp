@@ -182,7 +182,8 @@ bool Adafruit_BluefruitLE_SPI::begin(boolean v, boolean blocking)
 void Adafruit_BluefruitLE_SPI::end(void)
 {
   if (m_sck_pin == -1) {
-    _stopSPI();
+#warning hardware spi not disabled after use, uncomment when _stopSPI working in AVR library
+    // _stopSPI();
   }
 }
 

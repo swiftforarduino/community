@@ -9,6 +9,10 @@ extern "C" {
 #define uint32 uint32_t
 #endif
 
+#ifndef millis
+#define millis _ticks
+#endif
+
 // nullable annotations are meaningless in GCC
 #ifndef __clang_version__
 #define __nonnull 

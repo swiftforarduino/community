@@ -16,19 +16,21 @@ LEGACY_CATALOG_FILE=../../contributed\ libraries/catalog.txt
 
 
 # source files and settings
-CPP_FILES=Adafruit_ATParser.cpp Adafruit_BLE.cpp Adafruit_BluefruitLE_SPI.cpp Adafruit_Bluefruit_LE.cpp
+CPP_FILES=Adafruit_ATParser.cpp Adafruit_BLE.cpp Adafruit_BluefruitLE_SPI.cpp\
+ Adafruit_Bluefruit_LE.cpp arduinoReplacementClasses/Stream.cpp arduinoReplacementClasses/Print.cpp\
+ utility/Adafruit_FIFO.cpp arduinoReplacementClasses/abi.cpp
 MCU=atmega328p
-C_OPTS=-std=c99 -O3
-CPP_OPTS=-std=c++11 -O3
+# note, for this bluetooth library, it is too bulky, probably partly because it
+# uses an unnecessarily large amount of underlying Arduino furniture like Stream
+# and Print, as a result we have to compile with -Os or it won't fit
+CPP_OPTS=-std=c++11 -Os
 AR_OPTS=rcs
 
 
 # derived variables
 CPP_OBJS=$(CPP_FILES:.cpp=.o)
-GCC_OPTS=-mmcu=$(MCU) $(C_OPTS) -B"$(AVR_BINUTILS_DIR)"
 GCC_PLUS_OPTS=-mmcu=$(MCU) $(CPP_OPTS) -B"$(AVR_BINUTILS_DIR)" -iquote arduinoReplacementClasses
 AR="$(AVR_BINUTILS_DIR)/avr-ar" $(AR_OPTS)
-GCC="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_OPTS)
 GCC_PLUS="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_PLUS_OPTS)
 BUILT_PRODUCT=lib$(MODULE_NAME).a
 MODULE_NAME_DIR=$(UNSAFE_MODULES_INSTALL_DIR)/$(MODULE_NAME)

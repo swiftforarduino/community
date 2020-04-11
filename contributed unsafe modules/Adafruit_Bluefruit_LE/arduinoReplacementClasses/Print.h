@@ -22,6 +22,10 @@
 
 #include <inttypes.h>
 #include <stdio.h> // for size_t
+#include <string.h>
+#include <avr/pgmspace.h>
+
+class __FlashStringHelper;
 
 // #include "WString.h"
 // #include "Printable.h"

@@ -24,6 +24,7 @@
 
 // #include "Arduino.h"
 #include "Stream.h"
+#include "shims.h"
 
 #define PARSE_TIMEOUT 1000  // default number of milli-seconds to wait
 
@@ -228,29 +229,29 @@ size_t Stream::readBytesUntil(char terminator, char *buffer, size_t length)
   return index; // return number of characters, not including null terminator
 }
 
-String Stream::readString()
-{
-  String ret;
-  int c = timedRead();
-  while (c >= 0)
-  {
-    ret += (char)c;
-    c = timedRead();
-  }
-  return ret;
-}
+// String Stream::readString()
+// {
+//   String ret;
+//   int c = timedRead();
+//   while (c >= 0)
+//   {
+//     ret += (char)c;
+//     c = timedRead();
+//   }
+//   return ret;
+// }
 
-String Stream::readStringUntil(char terminator)
-{
-  String ret;
-  int c = timedRead();
-  while (c >= 0 && c != terminator)
-  {
-    ret += (char)c;
-    c = timedRead();
-  }
-  return ret;
-}
+// String Stream::readStringUntil(char terminator)
+// {
+//   String ret;
+//   int c = timedRead();
+//   while (c >= 0 && c != terminator)
+//   {
+//     ret += (char)c;
+//     c = timedRead();
+//   }
+//   return ret;
+// }
 
 int Stream::findMulti( struct Stream::MultiTarget *targets, int tCount) {
   // any zero length target string automatically matches and would make
