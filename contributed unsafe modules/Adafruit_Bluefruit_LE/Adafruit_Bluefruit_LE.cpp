@@ -2,6 +2,9 @@
 #define F_CPU 16000000UL
 #endif
 
+#undef BLUEFRUIT_MODE_COMMAND
+#undef BLUEFRUIT_MODE_DATA
+
 #include "Adafruit_Bluefruit_LE.h"
 #include "Adafruit_BLE.h"
 #include "Adafruit_ATParser.h"
@@ -20,8 +23,8 @@ Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_
 
 extern "C" {
 
-	_Bool btstart() {
-		return ble.begin(false);
+	_Bool btstart(_Bool verbose) {
+		return ble.begin(verbose);
 	}
 
 	_Bool btreset() {
@@ -43,8 +46,12 @@ extern "C" {
 		ble.info();
 	}
 
-	_Bool btcheckminimumversion(const char * version) {
+	_Bool btcheckminimumversionbuffer(const char * version) {
 		return ble.isVersionAtLeast(version);
+	}
+
+	_Bool btcheckminimumversionfixedstring(const char * version) {
+		return ble.isVersionAtLeast(reinterpret_cast<const __FlashStringHelper *>(version));
 	}
 
 	_Bool btfactoryreset() {
@@ -95,6 +102,6 @@ extern "C" {
 		return ble.read();
 	}
 
-	const _Bool BLUEFRUIT_MODE_DATA = LOW;
-  const _Bool BLUEFRUIT_MODE_COMMAND = HIGH;
+	// const _Bool BLUEFRUIT_MODE_DATA = LOW;
+ //  const _Bool BLUEFRUIT_MODE_COMMAND = HIGH;
 }

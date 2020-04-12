@@ -18,8 +18,9 @@
 
 #include <stdlib.h>
 
-extern "C" void __cxa_pure_virtual(void) __attribute__ ((__noreturn__));
-extern "C" void __cxa_deleted_virtual(void) __attribute__ ((__noreturn__));
+// these errors are a noop, it seems less destructive than a hard to trace hang
+extern "C" void __cxa_pure_virtual(void);
+extern "C" void __cxa_deleted_virtual(void);
 
 extern "C" int __cxa_guard_acquire(void);
 extern "C" void __cxa_guard_release(void);
@@ -27,13 +28,11 @@ extern "C" void __cxa_guard_release(void);
 void __cxa_pure_virtual(void) {
   // We might want to write some diagnostics to uart in this case
   //std::terminate();
-  abort();
 }
 
 void __cxa_deleted_virtual(void) {
   // We might want to write some diagnostics to uart in this case
   //std::terminate();
-  abort();
 }
 
 //int __cxxabiv1::__cxa_guard_acquire(uint64_t* guard_object)

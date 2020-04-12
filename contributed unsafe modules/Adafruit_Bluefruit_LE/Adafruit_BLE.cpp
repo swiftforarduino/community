@@ -275,6 +275,16 @@ bool Adafruit_BLE::isVersionAtLeast(const char * versionString)
   return result;
 }
 
+#define versionBufferSize 20
+bool Adafruit_BLE::isVersionAtLeast(const __FlashStringHelper * versionString) {
+  char versionBuffer[versionBufferSize];
+  if (strncpy_P(versionBuffer, (const char *)versionString, versionBufferSize)) {
+    return isVersionAtLeast(versionBuffer);
+  } else {
+    return false;
+  }
+}
+
 /******************************************************************************/
 /*!
     @brief  Get (multiple) lines of response data into internal buffer.

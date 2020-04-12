@@ -88,6 +88,7 @@ class Adafruit_BLE : public Adafruit_ATParser
 
     bool isConnected(void);
     bool isVersionAtLeast(const char * versionString);
+    bool isVersionAtLeast(const __FlashStringHelper * versionString);
     void disconnect(void);
 
     bool setAdvData(uint8_t advdata[], uint8_t size);

@@ -1,22 +1,38 @@
 import Adafruit_Bluefruit_LE
 
 /* setup */
-func btStart() -> Bool {
-	return btstart()
+@discardableResult
+func btStart(verbose: Bool = false) -> Bool {
+	return btstart(verbose)
 }
 
+@discardableResult
 func btReset() -> Bool {
 	return btreset()
 }
 
+func btSetVerbose(on: Bool) {
+    return btverbose(on)
+}
+
+func btInfo() {
+    return btinfo()
+}
+
+@discardableResult
 func btSetEcho(on: Bool) -> Bool {
 	return btecho(on)
 }
 
-func btCheckMinimumVersion(version: Optional<UnsafePointer<Int8>>) -> Bool {
-	return btcheckminimumversion(version)
+func btCheckMinimumVersion(versionBuffer: Optional<UnsafePointer<Int8>>) -> Bool {
+	return btcheckminimumversionbuffer(versionBuffer)
 }
 
+func btCheckMinimumVersion(versionFixedString: Optional<UnsafePointer<Int8>>) -> Bool {
+    return btcheckminimumversionfixedstring(versionFixedString)
+}
+
+@discardableResult
 func btFactoryReset() -> Bool {
 	return btfactoryreset()
 }
@@ -27,6 +43,7 @@ func btIsConnected() -> Bool {
 	return btisconnected()
 }
 
+@discardableResult
 func btSetMode(mode: UInt8) -> Bool {
 	return btsetmode(mode)
 }
@@ -34,16 +51,19 @@ func btSetMode(mode: UInt8) -> Bool {
 /* commands */
 // note: use this variant if you are constructing a command from multiple parts
 // using the stringStartNew, stringAddFromProgmem, stringCurrentValue, etc.
+@discardableResult
 func btSendCommand(buffer: Optional<UnsafePointer<Int8>>) -> Bool {
 	return btsendcommandbuffer(buffer)
 }
 
 // note: use this variant for fixed commands that are unchanging and can be
 // automatically put into flash memory
+@discardableResult
 func btSendCommand(fixedString: Optional<UnsafePointer<Int8>>) -> Bool {
 	return btsendcommandfixedstring(fixedString)
 }
 
+@discardableResult
 func btWaitForOK() -> Bool {
 	return btwaitforok()
 }
@@ -79,7 +99,7 @@ func btRead() -> UInt16 {
                 "partCode":"btSendCommand(fixedString: \"AT+GAPDEVNAME=S4A Bluetooth Device\")"
             },
             {"partName":"Check Bluetooth Minimum Firmware Version",
-                "partCode":"stringStartNew()\nstringAddFromProgmem(message: \"0.6.6\")\nif btCheckMinimumVersion(version: stringCurrentValue()) {\n  // put commands here that need a newish bluetooth firmware\n}"
+                "partCode":"if btCheckMinimumVersion(versionFixedString: \"0.6.6\") {\n  // put commands here that need a newer bluetooth firmware\n}"
             },
             {"partName":"Switch Bluetooth to Data Mode",
                 "partCode":"btSetMode(mode: BLUEFRUIT_MODE_DATA)"
@@ -91,7 +111,7 @@ func btRead() -> UInt16 {
                 "partCode":"stringStartNew()\nstringAddFromProgmem(message: \"Bluetooth over UART is... \")\nstringAddCharacter(79)\nstringAddCharacter(75)\nbtPrint(buffer: stringCurrentValue())"
             },
             {"partName":"Setup Bluetooth HID keyboard and advertise it",
-                "partCode":"btSendCommand(fixedString: \"AT+BleKeyboardEn=On\")"
+                "partCode":"btSendCommand(fixedString: \"AT+BleKeyboardEn=On\")\nbtReset()\n"
             },
             {"partName":"Send data from Bluetooth HID keyboard",
                 "partCode":"stringStartNew()\nstringAddFromProgmem(message: \"AT+BleKeyboard=\")\nstringAddCharacter(79)\nstringAddCharacter(75)\nbtPrint(buffer: stringCurrentValue())\nbtWaitForOK()"

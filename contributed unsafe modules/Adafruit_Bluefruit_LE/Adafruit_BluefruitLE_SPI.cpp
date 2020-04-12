@@ -45,10 +45,6 @@
   #define min(a,b) ((a) < (b) ? (a) : (b))
 #endif
 
-
-// SPISettings bluefruitSPI(4000000, MSBFIRST, SPI_MODE0);
-
-
 /******************************************************************************/
 /*!
     @brief Instantiates a new instance of the Adafruit_BluefruitLE_SPI class
@@ -182,7 +178,6 @@ bool Adafruit_BluefruitLE_SPI::begin(boolean v, boolean blocking)
 void Adafruit_BluefruitLE_SPI::end(void)
 {
   if (m_sck_pin == -1) {
-#warning hardware spi not disabled after use when _stopSPI is missing in AVR library
     _stopSPI();
   }
 }

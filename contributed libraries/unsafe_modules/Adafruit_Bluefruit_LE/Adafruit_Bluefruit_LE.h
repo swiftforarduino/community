@@ -28,14 +28,20 @@
 #define NULLABLE 
 #endif
 
+#define BLUEFRUIT_MODE_COMMAND   HIGH
+#define BLUEFRUIT_MODE_DATA      LOW
+
 #ifndef __clang_version__
 extern "C" {
 #endif
 
-	bool btstart();
+	bool btstart(bool verbose);
 	bool btreset();
+	void btverbose(bool on);
+	void btinfo(void);
 	bool btecho(bool on);
-	bool btcheckminimumversion(const char * version);
+	bool btcheckminimumversionbuffer(const char * version);
+	bool btcheckminimumversionfixedstring(const char * version);
 	bool btfactoryreset();
 	bool btisconnected();
 	bool btsetmode(uint8_t new_mode);
@@ -47,6 +53,8 @@ extern "C" {
 	uint16_t btavailable();
 	uint16_t btread();
 
+  // extern const bool BLUEFRUIT_MODE_DATA;
+  // extern const bool BLUEFRUIT_MODE_COMMAND;
 #ifndef __clang_version__
 }
 #endif

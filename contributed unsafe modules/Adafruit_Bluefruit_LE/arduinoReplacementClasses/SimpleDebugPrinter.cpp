@@ -6,7 +6,7 @@ size_t SimpleDebugPrinter::write(const uint8_t *buf, size_t size)
   return size;
 }
 
-size_t write(uint8_t byte) {
+size_t SimpleDebugPrinter::write(uint8_t byte) {
 	_sendByte(byte);
 	return 1;
 }
