@@ -4,7 +4,7 @@ typealias IntegerLiteralType = UInt8
 
 setupStepper(IN1: 8, IN2: 9, IN3: 10, IN4: 11)
 
-SetupSerial(baudRate: 9600)
+SetupSerial()
 print(message: Put0)
 
 while(true) {
