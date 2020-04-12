@@ -43,7 +43,7 @@ extern "C" {
 	// blocks until reception complete
 	const char * __nonnull _receiveSPIBufferBlocking(unsigned short maxMsgLen, _Bool receiveString);
 	// disable hardware SPI, release pins 11,12,13, you should now reset their input/output modes if you want to use them
-	void _stopSPI();
+	void __attribute__((weak)) _stopSPI();
 
 	// utils
 	uint32 _ticks();

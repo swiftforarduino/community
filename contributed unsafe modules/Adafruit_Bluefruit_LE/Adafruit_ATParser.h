@@ -49,6 +49,7 @@
 
 #include "Stream.h"
 #include "utility/sdep.h"
+#include "SimpleDebugPrinter.h"
 
 // Class to facilitate sending AT Command and check response
 
@@ -96,6 +97,8 @@ protected:
 
   // internal function
   bool send_arg_get_resp(int32_t* reply, uint8_t argcount, uint16_t argtype[], uint32_t args[]);
+
+  SimpleDebugPrinter _debugPrinter;
 
 public:
   Adafruit_ATParser(void);

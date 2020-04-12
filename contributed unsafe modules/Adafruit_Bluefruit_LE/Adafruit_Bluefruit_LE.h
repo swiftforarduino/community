@@ -47,6 +47,8 @@ extern "C" {
 	uint16_t btavailable();
 	uint16_t btread();
 
+  extern const bool BLUEFRUIT_MODE_DATA;
+  extern const bool BLUEFRUIT_MODE_COMMAND;
 #ifndef __clang_version__
 }
 #endif

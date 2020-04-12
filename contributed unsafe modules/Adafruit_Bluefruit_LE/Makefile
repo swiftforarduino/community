@@ -18,7 +18,8 @@ LEGACY_CATALOG_FILE=../../contributed\ libraries/catalog.txt
 # source files and settings
 CPP_FILES=Adafruit_ATParser.cpp Adafruit_BLE.cpp Adafruit_BluefruitLE_SPI.cpp\
  Adafruit_Bluefruit_LE.cpp arduinoReplacementClasses/Stream.cpp arduinoReplacementClasses/Print.cpp\
- utility/Adafruit_FIFO.cpp arduinoReplacementClasses/abi.cpp
+ utility/Adafruit_FIFO.cpp arduinoReplacementClasses/abi.cpp arduinoReplacementClasses/SimpleDebugPrinter.cpp
+
 MCU=atmega328p
 # note, for this bluetooth library, it is too bulky, probably partly because it
 # uses an unnecessarily large amount of underlying Arduino furniture like Stream

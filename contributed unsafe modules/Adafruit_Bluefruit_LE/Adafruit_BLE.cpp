@@ -230,7 +230,7 @@ void Adafruit_BLE::info(void)
   bool v = _verbose;
   _verbose = false;
 
-  // SerialDebug.println(F("----------------"));
+  _debugPrinter.println(F("----------------"));
 
   // switch mode if necessary to execute command
   if ( current_mode == BLUEFRUIT_MODE_DATA ) setMode(BLUEFRUIT_MODE_COMMAND);
@@ -239,13 +239,13 @@ void Adafruit_BLE::info(void)
 
   while ( readline() ) {
     if ( !strcmp(buffer, "OK") || !strcmp(buffer, "ERROR")  ) break;
-    // SerialDebug.println(buffer);
+    _debugPrinter.println(buffer);
   }
 
   // switch back if necessary
   if ( current_mode == BLUEFRUIT_MODE_DATA ) setMode(BLUEFRUIT_MODE_DATA);
 
-  // SerialDebug.println(F("----------------"));
+  _debugPrinter.println(F("----------------"));
 
   _verbose = v;
 }

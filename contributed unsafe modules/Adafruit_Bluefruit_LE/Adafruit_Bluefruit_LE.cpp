@@ -35,13 +35,13 @@ extern "C" {
 	// verbose mode and btinfo both rely on the serialdebug
 	// mechanism which expects debug serial to be available
 	// which has been commented out, find another way if it's needed
-	// void btverbose(_Bool on) {
-	// 	ble.verbose(on);
-	// }
+	void btverbose(_Bool on) {
+		ble.verbose(on);
+	}
 
-	// char * btinfo() {
-	// 	return ble.info(on);
-	// }
+	void btinfo(void) {
+		ble.info();
+	}
 
 	_Bool btcheckminimumversion(const char * version) {
 		return ble.isVersionAtLeast(version);
@@ -94,4 +94,7 @@ extern "C" {
 	uint16_t btread() {
 		return ble.read();
 	}
+
+	const _Bool BLUEFRUIT_MODE_DATA = LOW;
+  const _Bool BLUEFRUIT_MODE_COMMAND = HIGH;
 }
