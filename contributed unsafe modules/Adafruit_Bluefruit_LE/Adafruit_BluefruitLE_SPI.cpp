@@ -132,7 +132,7 @@ bool Adafruit_BluefruitLE_SPI::begin(boolean v, boolean blocking)
 
   if (m_sck_pin == -1) {
     // hardware SPI
-    _setupSPIAsMaster(0, 0, true);
+    _setupSPIAsMaster(0, 0, false);
   } else {
     _pinMode(m_sck_pin, OUTPUT);
     _digitalWrite(m_sck_pin, LOW);
