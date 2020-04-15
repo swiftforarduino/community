@@ -42,7 +42,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-// #include <cstring.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
@@ -69,11 +68,7 @@
 #define bitWrite(value, bit, bitvalue) ((bitvalue) ? bitSet(value, bit) : bitClear(value, bit))
 #define F(string_literal) (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))
 
-// #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
-// #define SerialDebug SERIAL_PORT_USBVIRTUAL
-// #else
-// #define SerialDebug Serial
-// #endif
+#define SerialDebug _debugPrinter
 
 // High byte is type, Low byte is datacount
 // datacount is needed when passing ByteArray argument

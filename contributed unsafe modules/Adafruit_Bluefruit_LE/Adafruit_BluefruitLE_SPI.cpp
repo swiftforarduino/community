@@ -34,12 +34,7 @@
 */
 /**************************************************************************/
 #include "Adafruit_BluefruitLE_SPI.h"
-// #include <Arduino.h>
 #include <stdlib.h>
-
-#define digitalRead _digitalRead
-#define digitalWrite _digitalWrite
-#define delayMicroseconds _delayUs
 
 #ifndef min
   #define min(a,b) ((a) < (b) ? (a) : (b))
@@ -124,20 +119,20 @@ bool Adafruit_BluefruitLE_SPI::begin(boolean v, boolean blocking)
 {
   _verbose = v;
 
-  _pinMode(m_irq_pin, INPUT);
+  pinMode(m_irq_pin, INPUT);
 
   // Set CS pin to output and de-assert by default
-  _pinMode(m_cs_pin, OUTPUT);
-  _digitalWrite(m_cs_pin, HIGH);
+  pinMode(m_cs_pin, OUTPUT);
+  digitalWrite(m_cs_pin, HIGH);
 
   if (m_sck_pin == -1) {
     // hardware SPI
     _setupSPIAsMaster(0, 0, false);
   } else {
-    _pinMode(m_sck_pin, OUTPUT);
-    _digitalWrite(m_sck_pin, LOW);
-    _pinMode(m_miso_pin, INPUT);
-    _pinMode(m_mosi_pin, OUTPUT);
+    pinMode(m_sck_pin, OUTPUT);
+    digitalWrite(m_sck_pin, LOW);
+    pinMode(m_miso_pin, INPUT);
+    pinMode(m_mosi_pin, OUTPUT);
   }
 
   bool isOK;
@@ -150,11 +145,11 @@ bool Adafruit_BluefruitLE_SPI::begin(boolean v, boolean blocking)
   if (m_rst_pin >= 0)
   {
     // pull the RST to GND for 10 ms
-    _pinMode(m_rst_pin, OUTPUT);
-    _digitalWrite(m_rst_pin, HIGH);
-    _digitalWrite(m_rst_pin, LOW);
+    pinMode(m_rst_pin, OUTPUT);
+    digitalWrite(m_rst_pin, HIGH);
+    digitalWrite(m_rst_pin, LOW);
     _delayMs(10);
-    _digitalWrite(m_rst_pin, HIGH);
+    digitalWrite(m_rst_pin, HIGH);
 
     isOK= true;
   }
@@ -353,7 +348,7 @@ size_t Adafruit_BluefruitLE_SPI::write(uint8_t c)
     m_tx_buffer[m_tx_count++] = c;
   }
 
-  // if (_verbose) SerialDebug.print((char) c);
+  if (_verbose) SerialDebug.print((char) c);
 
   return 1;
 }
@@ -629,6 +624,8 @@ bool Adafruit_BluefruitLE_SPI::getPacket(sdepMsgResponse_t* p_response)
 
     // Command is 16-bit at odd address, may have alignment issue with 32-bit chip
     uint16_t cmd_id = (((uint16_t)p_header->cmd_id_high)<<8) | ((uint16_t)p_header->cmd_id_low);
+    SerialDebug.print(F("got a reply to command:"));
+    SerialDebug.println(cmd_id);
 
     // Error Message Response
     if ( p_header->msg_type == SDEP_MSGTYPE_ERROR ) break;

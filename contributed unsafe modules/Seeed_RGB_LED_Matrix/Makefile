@@ -18,18 +18,14 @@ LEGACY_CATALOG_FILE=../../contributed\ libraries/catalog.txt
 # source files and settings
 CPP_FILES=grove_two_rgb_led_matrix.cpp Seeed_RGB_LED_Matrix.cpp
 MCU=atmega328p
-C_OPTS=-std=c99 -O3
-CPP_OPTS=-std=c++11 -O3
+CPP_OPTS=-std=c++11 -ffunction-sections -Os
 AR_OPTS=rcs
 
 
 # derived variables
 CPP_OBJS=$(CPP_FILES:.cpp=.o)
-C_OBJS=$(C_FILES:.c=.o)
-GCC_OPTS=-mmcu=$(MCU) $(C_OPTS) -B"$(AVR_BINUTILS_DIR)"
 GCC_PLUS_OPTS=-mmcu=$(MCU) $(CPP_OPTS) -B"$(AVR_BINUTILS_DIR)"
 AR="$(AVR_BINUTILS_DIR)/avr-ar" $(AR_OPTS)
-GCC="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_OPTS)
 GCC_PLUS="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_PLUS_OPTS)
 BUILT_PRODUCT=lib$(MODULE_NAME).a
 MODULE_NAME_DIR=$(UNSAFE_MODULES_INSTALL_DIR)/$(MODULE_NAME)
@@ -58,9 +54,6 @@ $(BUILT_PRODUCT): $(CPP_OBJS) $(C_OBJS)
 
 $(CPP_OBJS): $(CPP_FILES)
 	$(GCC_PLUS) -I . -DF_CPU=16000000UL -c -o $@ $(@:.o=.cpp)
-
-$(C_OBJS): $(C_FILES)
-	$(GCC) -I . -DF_CPU=16000000UL -c -o $@ $(@:.o=.c)
 
 clean:
 	rm -rf *.o *.a

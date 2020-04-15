@@ -34,7 +34,6 @@
 */
 /**************************************************************************/
 #include "Adafruit_BLE.h"
-// #include "Adafruit_BLEMIDI.h"
 
 #ifndef min
   #define min(a,b) ((a) < (b) ? (a) : (b))
@@ -230,7 +229,7 @@ void Adafruit_BLE::info(void)
   bool v = _verbose;
   _verbose = false;
 
-  _debugPrinter.println(F("----------------"));
+  SerialDebug.println(F("----------------"));
 
   // switch mode if necessary to execute command
   if ( current_mode == BLUEFRUIT_MODE_DATA ) setMode(BLUEFRUIT_MODE_COMMAND);
@@ -239,13 +238,13 @@ void Adafruit_BLE::info(void)
 
   while ( readline() ) {
     if ( !strcmp(buffer, "OK") || !strcmp(buffer, "ERROR")  ) break;
-    _debugPrinter.println(buffer);
+    SerialDebug.println(buffer);
   }
 
   // switch back if necessary
   if ( current_mode == BLUEFRUIT_MODE_DATA ) setMode(BLUEFRUIT_MODE_DATA);
 
-  _debugPrinter.println(F("----------------"));
+  SerialDebug.println(F("----------------"));
 
   _verbose = v;
 }
@@ -337,27 +336,6 @@ void Adafruit_BLE::update(uint32_t period_ms)
 
       this->_ble_uart_rx_callback( (char*) tempbuf, len);
     }
-
-//     if ( this->_ble_midi_rx_callback && bitRead(system_event, EVENT_SYSTEM_BLE_MIDI_RX) )
-//     {
-// //      _verbose = true;
-//       while(1)
-//       {
-//         // use RAW command version
-//         println( F("AT+BLEMIDIRXRAW") );
-
-//         // readraw swallow OK/ERROR already
-//         uint16_t len = readraw();
-
-//         // break if there is no more MIDI event
-//         if ( len == 0 ) break;
-
-//         // copy to internal buffer for other usage !
-//         memcpy(tempbuf, this->buffer, len);
-
-//         Adafruit_BLEMIDI::processRxCallback(tempbuf, len, this->_ble_midi_rx_callback);
-//       }
-//     }
 
     //--------------------------------------------------------------------+
     // Gatt Event

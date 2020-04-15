@@ -19,6 +19,22 @@ extern "C" {
 #define __nullable 
 #endif
 
+#ifndef digitalRead
+#define digitalRead _digitalRead
+#endif
+
+#ifndef digitalWrite
+#define digitalWrite _digitalWrite
+#endif
+
+#ifndef pinMode
+#define pinMode _pinMode
+#endif
+
+#ifndef delayMicroseconds
+#define delayMicroseconds _delayUs
+#endif
+
 	void _i2cinit(unsigned char speed, unsigned char premultiplier, _Bool activatePullups);
 	_Bool _i2cstart();
 	void _i2cstop();
@@ -85,7 +101,12 @@ extern "C" {
 	// blocks until transmission and reception complete
 	unsigned char _sendSPIByteBlocking(unsigned char byte);
 	// blocks until transmission and reception complete
-	const char * __nonnull _sendReceiveSPIBufferBlocking(unsigned short maxMsgLen, const char * __nonnull message, _Bool sendMessage, _Bool sendString, _Bool receiveString);
+	const char * __nonnull _sendReceiveSPIBufferBlocking(
+		unsigned short maxMsgLen,
+		const char * __nonnull message,
+		_Bool sendMessage,
+		_Bool sendString,
+		_Bool receiveString);
 
   // Memory efficient string buffer handling/building.
 	// note, only one string buffer can be used at a time

@@ -98,8 +98,18 @@ extern "C" {
 		return ble.available();
 	}
 
-	uint16_t btread() {
+	uint16_t btreadword() {
 		return ble.read();
+	}
+
+	void btreadbytepair(char * byte1, char * byte2) {
+		uint16_t bytePair = ble.read();
+		if (byte1) {
+			*byte1 = bytePair & 0xff;
+		}
+		if (byte2) {
+			*byte2 = (bytePair & 0xff00) >> 8;
+		}
 	}
 
 	// const _Bool BLUEFRUIT_MODE_DATA = LOW;

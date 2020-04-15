@@ -85,8 +85,14 @@ func btAvailable() -> UInt16 {
 	return btavailable()
 }
 
-func btRead() -> UInt16 {
-	return btread()
+func btReadWord() -> UInt16 {
+	return btreadword()
+}
+
+func btRead() -> (byte1: UInt8, byte2: UInt8) {
+    var b1: UInt8 = 0
+    var b2: UInt8 = 0
+    return btread(&b1, &b2)
 }
 
 /* Snippets:

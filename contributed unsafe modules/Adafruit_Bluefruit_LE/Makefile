@@ -24,7 +24,7 @@ MCU=atmega328p
 # note, for this bluetooth library, it is too bulky, probably partly because it
 # uses an unnecessarily large amount of underlying Arduino furniture like Stream
 # and Print, as a result we have to compile with -Os or it won't fit
-CPP_OPTS=-std=c++11 -Os
+CPP_OPTS=-std=c++11 -ffunction-sections -Os
 AR_OPTS=rcs
 
 

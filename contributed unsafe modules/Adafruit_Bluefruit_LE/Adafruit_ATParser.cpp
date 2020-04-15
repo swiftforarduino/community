@@ -61,7 +61,7 @@ Adafruit_ATParser::Adafruit_ATParser(void)
 /******************************************************************************/
 bool Adafruit_ATParser::waitForOK(void)
 {
-  if (_verbose) _debugPrinter.print( F("\n<- ") );
+  if (_verbose) SerialDebug.print( F("\n<- ") );
 
   // Use temp buffer to avoid overwrite returned result if any
   char tempbuf[BLE_BUFSIZE+1];
@@ -137,7 +137,7 @@ bool Adafruit_ATParser::send_arg_get_resp(int32_t* reply, uint8_t argcount, uint
   // parse integer response if required
   if (reply)
   {
-    // if (_verbose) SerialDebug.print( F("\n<- ") );
+    if (_verbose) SerialDebug.print( F("\n<- ") );
     (*reply) = readline_parseInt();
   }
 
@@ -264,8 +264,8 @@ uint16_t Adafruit_ATParser::readline(char * buf, uint16_t bufsize, uint16_t time
   // Print out if is verbose
   if (_verbose && replyidx > 0)
   {
-    _debugPrinter.print(buf);
-    if (replyidx < bufsize) _debugPrinter.println();
+    SerialDebug.print(buf);
+    if (replyidx < bufsize) SerialDebug.println();
   }
 
   return replyidx;
@@ -327,11 +327,11 @@ uint16_t Adafruit_ATParser::readraw(uint16_t timeout)
   this->buffer[replyidx] = 0;  // null term
 
   // Print out if is verbose
- if (_verbose && replyidx > 0)
- {
-   _debugPrinter.print(buffer);
-   if (replyidx < BLE_BUFSIZE) _debugPrinter.println();
- }
+ // if (_verbose && replyidx > 0)
+ // {
+ //   SerialDebug.print(buffer);
+ //   if (replyidx < BLE_BUFSIZE) _debugPrinter.println();
+ // }
 
   return replyidx;
 }
