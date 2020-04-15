@@ -51,7 +51,8 @@ extern "C" {
 	void btprintbuffer(const char * cmd, bool addNewline);
 	void btprintfixedstring(const char * cmd, bool addNewline);
 	uint16_t btavailable();
-	uint16_t btread();
+	uint16_t btreadword();
+	void btreadbytepair(char * byte1, char * byte2);
 
   // extern const bool BLUEFRUIT_MODE_DATA;
   // extern const bool BLUEFRUIT_MODE_COMMAND;

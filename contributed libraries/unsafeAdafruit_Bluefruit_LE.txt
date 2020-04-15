@@ -1,11 +1,17 @@
 /* setup */
-func btStart() -> Bool 
+func btStart(verbose: Bool = false) -> Bool 
 
 func btReset() -> Bool 
 
-func btSetEcho(on: Bool) 
+func btSetVerbose(on: Bool) 
 
-func btCheckMinimumVersion(version: AVRString) -> Bool 
+func btInfo() 
+
+func btSetEcho(on: Bool) -> Bool 
+
+func btCheckMinimumVersion(versionBuffer: Optional<UnsafePointer<Int8>>) -> Bool 
+
+func btCheckMinimumVersion(versionFixedString: Optional<UnsafePointer<Int8>>) -> Bool 
 
 func btFactoryReset() -> Bool 
 
@@ -15,20 +21,30 @@ func btIsConnected() -> Bool
 func btSetMode(mode: UInt8) -> Bool 
 
 /* commands */
-func btSendCommand(buffer: AVRString) -> Bool 
+// note: use this variant if you are constructing a command from multiple parts
+// using the stringStartNew, stringAddFromProgmem, stringCurrentValue, etc.
+func btSendCommand(buffer: Optional<UnsafePointer<Int8>>) -> Bool 
 
-func btSendCommand(fixedString: AVRString) -> Bool 
+// note: use this variant for fixed commands that are unchanging and can be
+// automatically put into flash memory
+func btSendCommand(fixedString: Optional<UnsafePointer<Int8>>) -> Bool 
 
 func btWaitForOK() -> Bool 
 
 /* transmit/receive data */
-func btPrint(buffer: AVRString, appendNewline: Bool = true) 
+// note: use this variant if you are constructing a message from multiple parts
+// using the stringStartNew, stringAddFromProgmem, stringCurrentValue, etc.
+func btPrint(buffer: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true) 
 
-func btPrint(fixedString: AVRString, appendNewline: Bool = true) 
+// note: use this variant for fixed messages that are unchanging and can be
+// automatically put into flash memory
+func btPrint(fixedString: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true) 
 
 func btAvailable() -> UInt16 
 
-func btRead() -> UInt16 
+func btReadWord() -> UInt16 
+
+func btRead() -> (byte1: UInt8, byte2: UInt8) 
 
 /* GATT services */
 // todo
