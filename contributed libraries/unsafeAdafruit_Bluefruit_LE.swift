@@ -92,8 +92,12 @@ func btReadWord() -> UInt16 {
 func btRead() -> (byte1: UInt8, byte2: UInt8) {
     var b1: UInt8 = 0
     var b2: UInt8 = 0
-    return btread(&b1, &b2)
+    btreadbytepair(&b1, &b2)
+    return (b1, b2)
 }
+
+let btDataMode: UInt8 = 0
+let btCommandMode: UInt8 = 1
 
 /* Snippets:
  {

@@ -102,7 +102,7 @@ extern "C" {
 		return ble.read();
 	}
 
-	void btreadbytepair(char * byte1, char * byte2) {
+	void btreadbytepair(unsigned char * byte1, unsigned char * byte2) {
 		uint16_t bytePair = ble.read();
 		if (byte1) {
 			*byte1 = bytePair & 0xff;
@@ -111,7 +111,4 @@ extern "C" {
 			*byte2 = (bytePair & 0xff00) >> 8;
 		}
 	}
-
-	// const _Bool BLUEFRUIT_MODE_DATA = LOW;
- //  const _Bool BLUEFRUIT_MODE_COMMAND = HIGH;
 }

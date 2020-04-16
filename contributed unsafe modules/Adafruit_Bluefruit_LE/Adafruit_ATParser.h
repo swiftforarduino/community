@@ -52,8 +52,6 @@
 
 // Class to facilitate sending AT Command and check response
 
-#define BLUEFRUIT_MODE_COMMAND   HIGH
-#define BLUEFRUIT_MODE_DATA      LOW
 #define BLE_BUFSIZE              4*SDEP_MAX_PACKETSIZE
 
 // pulled from Arduino.h
@@ -69,6 +67,12 @@
 #define F(string_literal) (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))
 
 #define SerialDebug _debugPrinter
+
+#define BLUEFRUIT_MODE_DATA 0
+#define BLUEFRUIT_MODE_COMMAND 1
+
+extern const unsigned char _DATA_MODE;
+extern const unsigned char _COMMAND_MODE;
 
 // High byte is type, Low byte is datacount
 // datacount is needed when passing ByteArray argument

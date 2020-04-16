@@ -1,4 +1,9 @@
+#ifdef __clang_version__
+#define uint8_t unsigned char
+#define uint16_t unsigned short
+#else
 #include <stdint.h>
+#endif
 
 #define false 0
 #define true 1
@@ -28,9 +33,6 @@
 #define NULLABLE 
 #endif
 
-#define BLUEFRUIT_MODE_COMMAND   HIGH
-#define BLUEFRUIT_MODE_DATA      LOW
-
 #ifndef __clang_version__
 extern "C" {
 #endif
@@ -52,10 +54,8 @@ extern "C" {
 	void btprintfixedstring(const char * cmd, bool addNewline);
 	uint16_t btavailable();
 	uint16_t btreadword();
-	void btreadbytepair(char * byte1, char * byte2);
+	void btreadbytepair(unsigned char * byte1, unsigned char * byte2);
 
-  // extern const bool BLUEFRUIT_MODE_DATA;
-  // extern const bool BLUEFRUIT_MODE_COMMAND;
 #ifndef __clang_version__
 }
 #endif

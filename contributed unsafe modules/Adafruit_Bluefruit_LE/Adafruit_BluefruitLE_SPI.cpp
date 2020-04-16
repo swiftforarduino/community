@@ -624,8 +624,6 @@ bool Adafruit_BluefruitLE_SPI::getPacket(sdepMsgResponse_t* p_response)
 
     // Command is 16-bit at odd address, may have alignment issue with 32-bit chip
     uint16_t cmd_id = (((uint16_t)p_header->cmd_id_high)<<8) | ((uint16_t)p_header->cmd_id_low);
-    SerialDebug.print(F("got a reply to command:"));
-    SerialDebug.println(cmd_id);
 
     // Error Message Response
     if ( p_header->msg_type == SDEP_MSGTYPE_ERROR ) break;
