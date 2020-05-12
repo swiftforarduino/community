@@ -1,0 +1,21 @@
+//------------------------------------------------------------------------------
+//
+// strings.def
+// Swift For Arduino
+//
+// Strings are placed in here automatically by the IDE.
+// The macro PROGMEM_STRING(symbol,string) records a string for the build that
+// is stored in program memory as an optimisation. Note: at the time of writing
+// this is the only way to handle string constants in S4A.
+//
+// Usually you will not need to edit this file by hand, the IDE will do it for
+// you. If you do change the file by hand, you might break the build, so be careful!
+//
+//------------------------------------------------------------------------------
+
+PROGMEM_STRING(str0, "AT+BleKeyboardEn=On")
+PROGMEM_STRING(str1, "Started Bluetooth Keyboard, type letters or use \\b, \\n \\? for backspace, return or ?")
+PROGMEM_STRING(str2, "AT+BleKeyboard=")
+PROGMEM_STRING(str3, "AT+BLEBATTEN=1")
+PROGMEM_STRING(str4, "AT+BLEBATTVAL=64")
+PROGMEM_STRING(str5, "AT+GAPDEVNAME=S4A BT Keyboard")
