@@ -12,8 +12,5 @@
 // you. If you do change the file by hand, you make break the build, so be careful!
 //
 //------------------------------------------------------------------------------
-PROGMEM_STRING(str6, "AT+GAPDEVNAME=S4A BT Device")
-PROGMEM_STRING(str3, "connected")
-PROGMEM_STRING(str7, "loading previous variabless")
-PROGMEM_STRING(str8, "existing Value:")
-PROGMEM_STRING(str9, "existing Hue:")
+PROGMEM_STRING(str0, "AT+GAPDEVNAME=S4A BT Device")
+PROGMEM_STRING(str1, "connected")

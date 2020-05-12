@@ -46,8 +46,8 @@
     - update the iphone app to give a better ui
     - send the current colour back to the iphone on connect so it
     can update its ui accordingly
-    - add separately controlled white values if supported    
-    
+    - add separately controlled white values if supported
+
     ____________________________________________________________________________
 */
 
@@ -82,6 +82,18 @@ func showSolidColour(hue: UInt8, value: UInt8) {
     }
 }
 
+func currentState() -> (data: AVRString, length: UInt8) {
+    stringStartNew()
+    stringAddCharacter(0x48)
+    stringAddCharacter(currentHue)
+    stringAddCharacter(0x56)
+    stringAddCharacter(currentValue)
+    return (data: stringCurrentValue(), length: 4)
+}
+
+func sendCurrentState() {
+    btPrint(buffer: currentState().data)
+}
 
 func getBTCommand() -> (data: AVRString, length: UInt8) {
     while btAvailable() == 0 {} // block until data
@@ -106,6 +118,16 @@ func interpretCommand(cmd: (data: AVRString, length: UInt8)) {
     }
 
     let len = cmd.length
+    
+    if len > 0, data[0] == 0x3F {
+        sendCurrentState()
+        return
+    }
+    
+    if len > 1, data[0] == 0x48 {
+        currentHue = UInt8(bitPattern: data[1])
+        writeEEPROMWithoutVerify(address: 10, value: currentHue)
+    }
 
     if len > 3, data[2] == 0x56 {
         currentValue = UInt8(bitPattern: data[3])
@@ -113,11 +135,6 @@ func interpretCommand(cmd: (data: AVRString, length: UInt8)) {
             currentValue = 100
         }
         writeEEPROMWithoutVerify(address: 199, value: currentValue)
-    }
-
-    if len > 1, data[0] == 0x48 {
-        currentHue = UInt8(bitPattern: data[1])
-        writeEEPROMWithoutVerify(address: 10, value: currentHue)
     }
 
     showSolidColour(hue: currentHue, value: currentValue)
@@ -135,12 +152,14 @@ showSolidColour(hue: currentHue, value: currentValue)
 btStart(verbose: true)
 btSetEcho(on: false)
 btSetVerbose(on: false)
-btSendCommand(fixedString: str6)
+btSendCommand(fixedString: str0)
 
 // ...wait for connection, then go to data mode
 while !btIsConnected() {}
-print(message: str3)
+print(message: str1)
 btSetMode(mode: btDataMode)
+
+//delay(ms: 3000)
 
 // wait for commands to come in over bluetooth and implement them
 while(true) {
