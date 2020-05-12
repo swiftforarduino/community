@@ -1,0 +1,23 @@
+//------------------------------------------------------------------------------
+//
+// strings.def
+// Swift For Arduino
+//
+// Strings are placed in here automatically by the IDE.
+// The macro PROGMEM_STRING(symbol,string) records a string for the build that
+// is stored in program memory as an optimisation. Note: at the time of writing
+// this is the only way to handle string constants in S4A.
+//
+// Usually you will not need to edit this file by hand, the IDE will do it for
+// you. If you do change the file by hand, you might break the build, so be careful!
+//
+//------------------------------------------------------------------------------
+
+PROGMEM_STRING(SpO20, "SpO2:")
+PROGMEM_STRING(SpO21, "SpO2 invalid")
+PROGMEM_STRING(HR0, "HR:")
+PROGMEM_STRING(HR1, "HR invalid")
+
+PROGMEM_STRING(Started0, "Started")
+PROGMEM_STRING(NotFound0, "Part not found")
+PROGMEM_STRING(Setup0, "Setup complete")
