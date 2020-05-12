@@ -31,3 +31,9 @@ unsafeAdafruit_Bluefruit_LE.txt
 unsafe_modules/Adafruit_Bluefruit_LE/Adafruit_Bluefruit_LE.h
 unsafe_modules/Adafruit_Bluefruit_LE/module.modulemap
 unsafe_modules/Adafruit_Bluefruit_LE/libAdafruit_Bluefruit_LE.a
+
+unsafeMAX30105.swift
+unsafeMAX30105.txt
+unsafe_modules/MAX30105/MAX30105_.h
+unsafe_modules/MAX30105/module.modulemap
+unsafe_modules/MAX30105/libMAX30105.a
