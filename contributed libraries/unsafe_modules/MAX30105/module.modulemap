@@ -1,0 +1,4 @@
+module MAX30105 {
+  header "MAX30105_.h"
+	link "MAX30105"
+}
