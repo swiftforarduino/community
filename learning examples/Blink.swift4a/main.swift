@@ -1,13 +1,13 @@
 import AVR
 
 // Blink
-SetupSerial(baudRate: 9600)
+SetupSerial()
 pinMode(pin: 13, mode: OUTPUT)
-print(message: Happy0)
+print(message: Welcome0)
 
 while(true) {
   digitalWrite(pin: 13, value: HIGH)
-  delay(milliseconds: 1)
+  delay(milliseconds: 1000)
   digitalWrite(pin: 13, value: LOW)
-  delay(milliseconds: 13)
+  delay(milliseconds: 1000)
 }
