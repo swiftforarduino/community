@@ -1,0 +1,4 @@
+module Seeed_RGB_LED_Matrix {
+  header "Seeed_RGB_LED_Matrix.h"
+	link "Seeed_RGB_LED_Matrix"
+}

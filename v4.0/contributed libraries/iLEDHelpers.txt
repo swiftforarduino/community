@@ -1,0 +1,25 @@
+// Author: Carl Peto
+// Date: 07/29/2019
+// IDE Version: 3.0
+// Description: This library gives some extra functions to help you work with
+// intelligent LEDs, i.e. neopixels and similar devices.
+//----------------------
+// Constants
+//----------------------
+//-------------------------------------------------------------------------------
+// iLED Buffered
+//-------------------------------------------------------------------------------
+public func indicateFail() -> Never 
+
+// when version 2 of the compiler and AVR Lib are finished, will switch on this
+// kind of interface, but it needs more runtime than we currently have available
+// public func iLED_WritePixels(pixels: iLEDFastColor...) {
+// }
+//-------------------------------------------------------------------------------
+// iLED Control Functions
+//-------------------------------------------------------------------------------
+public func iLED_AllOn(color: iLEDFastColor) 
+
+//-------------------------------------------------------------------------------
+func iLED_AllOff() 
+

@@ -1,0 +1,39 @@
+// Author: Carl Peto
+// Date: 08/15/2019
+// IDE Version: 3.0
+// Description: This library allows you to respond to a rotary encoder being
+// turned clockwise or counterclockwise. Note: you need to keep the state of
+// the rotary encoder from one call to the next in order to detect rotation.
+// You use a tuple typed with PinsState to do this.
+/* To see an example of using the rotary encoder, see the example strobe-fan-sync for how to use it. */
+typealias PinsState = (pin1: Bool, pin2: Bool, centerPin: Bool)
+
+func debounce() 
+
+func checkRotaryEncoder(
+ pin1: UInt8,
+ pin2: UInt8,
+ centerPin: UInt8,
+ lastPinState: inout PinsState,
+ clockwise: @convention(c) () -> Void,
+ counterclockwise: @convention(c) () -> Void,
+ centerPinPressed: @convention(c) () -> Void)
+ 
+
+/*
+
+clockwise:
+pin2-before, pin4-before-> pin2-after, pin4-after
+0, 0 -> 1, 0
+1, 0 -> 1, 1
+1, 1 -> 0, 1
+0, 1 -> 0, 0
+
+anticlockwise:
+pin2-before, pin4-before-> pin2-after, pin4-after
+0, 0 -> 0, 1
+0, 1 -> 1, 1
+1, 1 -> 1, 0
+1, 0 -> 0, 0
+
+*/
