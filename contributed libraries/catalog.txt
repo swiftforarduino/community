@@ -37,3 +37,9 @@ unsafeMAX30105.txt
 unsafe_modules/MAX30105/MAX30105_.h
 unsafe_modules/MAX30105/module.modulemap
 unsafe_modules/MAX30105/libMAX30105.a
+
+unsafeTimerInterrupts.swift
+unsafeTimerInterrupts.txt
+unsafe_modules/TimerInterrupts/module.modulemap
+unsafe_modules/TimerInterrupts/libTimerInterrupts.a
+unsafe_modules/TimerInterrupts/TimerInterrupts.h
