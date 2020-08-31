@@ -1,13 +1,14 @@
 # outputs
-MODULE_NAME=MAX30105
-COPIED_FILES_U=module.modulemap MAX30105_.h
-COPIED_FILES_S=unsafeMAX30105.swift
+MODULE_NAME=TimerInterrupts
+COPIED_FILES_U=module.modulemap TimerInterrupts.h
+COPIED_FILES_S=unsafeTimerInterrupts.swift
 
 
 
 
 # source files and settings
-CPP_FILES=MAX30105.cpp spo2_algorithm.cpp heartRate.cpp MAX30105_.cpp
+CPP_FILES=
+C_FILES=TimerInterrupts.c
 
 # program location and settings
 # reasonable defaults, change to suit your machine
@@ -28,15 +29,21 @@ MCU=atmega328p
 # uses an unnecessarily large amount of underlying Arduino furniture like Stream
 # and Print, as a result we have to compile with -Os or it won't fit
 CPP_OPTS=-std=c++11 -ffunction-sections -Os
+C_OPTS=-std=c99 -ffunction-sections -O3
 AR_OPTS=rcs
 EXTRA_CPP_FLAGS=-DF_CPU=16000000UL
 
 
 # derived variables
 CPP_OBJS=$(CPP_FILES:.cpp=.o)
-GCC_PLUS_OPTS=-mmcu=$(MCU) $(CPP_OPTS) -B"$(AVR_BINUTILS_DIR)" -isystem arduinoReplacementClasses
+C_OBJS=$(C_FILES:.c=.o)
+
+GCC_PLUS_OPTS=-mmcu=$(MCU) $(CPP_OPTS) -B"$(AVR_BINUTILS_DIR)"
+GCC_OPTS=-mmcu=$(MCU) $(C_OPTS) -B"$(AVR_BINUTILS_DIR)"
+
 AR="$(AVR_BINUTILS_DIR)/avr-ar" $(AR_OPTS)
-GCC_PLUS="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_PLUS_OPTS)
+GCC_PLUS="$(AVR_GCC_BIN_DIR)/avr-g++" $(GCC_PLUS_OPTS)
+GCC="$(AVR_GCC_BIN_DIR)/avr-gcc" $(GCC_OPTS)
 BUILT_PRODUCT=lib$(MODULE_NAME).a
 MODULE_NAME_DIR=$(UNSAFE_MODULES_INSTALL_DIR)/$(MODULE_NAME)
 
@@ -59,11 +66,14 @@ endef
 
 all: $(BUILT_PRODUCT)
 
-$(BUILT_PRODUCT): $(CPP_OBJS)
+$(BUILT_PRODUCT): $(CPP_OBJS) $(C_OBJS)
 	$(AR) -o $@ $^
 
 %.o: %.cpp
 	$(GCC_PLUS) -I . $(EXTRA_CPP_FLAGS) -c -o $@ $(@:.o=.cpp)
+
+%.o: %.c
+	$(GCC) -I . $(EXTRA_C_FLAGS) -c -o $@ $(@:.o=.c)
 
 clean:
 	rm -rf *.o *.a

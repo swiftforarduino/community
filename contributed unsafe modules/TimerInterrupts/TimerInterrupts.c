@@ -3,7 +3,7 @@
 #endif
 
 #include "TimerInterrupts.h"
-#include "shims.h"
+#include <avr/interrupt.h>
 
 // The documented interrupts are:
 /*
