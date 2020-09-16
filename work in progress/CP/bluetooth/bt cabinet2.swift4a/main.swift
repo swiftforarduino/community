@@ -63,17 +63,23 @@ SetupSerial()
 // attempt to retrieve previous hue/value from EEPROM
 var existingF = readEEPROM(address: 199)
 var existingHue = readEEPROM(address: 10)
-
+var existingOn = readEEPROM(address: 299)
 
 var currentValue: UInt8 = existingF
 
 // current hue/value
 var currentHue: UInt8 = existingHue
 
+var on: Bool = existingOn != 0
 
 // helper functions
 func showSolidColour(hue: UInt8, value: UInt8) {
-    let col = iLEDFastMakeColor(hue: hue, saturation: 255, value: value, white: 0)
+    var col: iLEDFastColor
+    if on {
+        col = iLEDFastMakeColor(hue: hue, saturation: 255, value: value, white: 0)
+    } else {
+        col = iLEDOff
+    }
 
     var i: UInt16 = 1
     while i <= pixelCount {
@@ -88,11 +94,23 @@ func currentState() -> (data: AVRString, length: UInt8) {
     stringAddCharacter(currentHue)
     stringAddCharacter(0x56)
     stringAddCharacter(currentValue)
-    return (data: stringCurrentValue(), length: 4)
+    stringAddCharacter(0x31)
+    stringAddCharacter(on ? 1 : 0)
+    return (data: stringCurrentValue(), length: 6)
 }
 
 func sendCurrentState() {
     btPrint(buffer: currentState().data)
+}
+
+func setOn() {
+    on = true
+    writeEEPROMWithoutVerify(address: 299, value: 1)
+}
+
+func setOff() {
+    on = false
+    writeEEPROMWithoutVerify(address: 299, value: 0)
 }
 
 func getBTCommand() -> (data: AVRString, length: UInt8) {
@@ -118,12 +136,22 @@ func interpretCommand(cmd: (data: AVRString, length: UInt8)) {
     }
 
     let len = cmd.length
-    
+
     if len > 0, data[0] == 0x3F {
         sendCurrentState()
         return
     }
-    
+
+    if len > 0, data[0] == 0x30 {
+        setOff()
+        return
+    }
+
+    if len > 0, data[0] == 0x31 {
+        setOn()
+        return
+    }
+
     if len > 1, data[0] == 0x48 {
         currentHue = UInt8(bitPattern: data[1])
         writeEEPROMWithoutVerify(address: 10, value: currentHue)
