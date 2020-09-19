@@ -81,10 +81,8 @@ func showSolidColour(hue: UInt8, value: UInt8) {
         col = iLEDOff
     }
 
-    var i: UInt16 = 1
-    while i <= pixelCount {
-      iLEDFastWritePixel(color: col)
-      i = i &+ 1
+    for _ in 1...pixelCount {
+        iLEDFastWritePixel(color: col)
     }
 }
 
