@@ -13,6 +13,8 @@ func btCheckMinimumVersion(versionBuffer: Optional<UnsafePointer<Int8>>) -> Bool
 
 func btCheckMinimumVersion(versionFixedString: Optional<UnsafePointer<Int8>>) -> Bool 
 
+func btCheckMinimumVersion(_ versionStaticString: StaticString) -> Bool 
+
 func btFactoryReset() -> Bool 
 
 /* change/check status/connection */
@@ -29,6 +31,11 @@ func btSendCommand(buffer: Optional<UnsafePointer<Int8>>) -> Bool
 // automatically put into flash memory
 func btSendCommand(fixedString: Optional<UnsafePointer<Int8>>) -> Bool 
 
+// note: use this variant for fixed commands that are unchanging and can be
+// automatically put into flash memory
+// (note this is the same as the fixedString variant, but using StaticString for convenience)
+func btSendCommand(_ staticString: StaticString) -> Bool 
+
 func btWaitForOK() -> Bool 
 
 /* transmit/receive data */
@@ -39,6 +46,11 @@ func btPrint(buffer: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true)
 // note: use this variant for fixed messages that are unchanging and can be
 // automatically put into flash memory
 func btPrint(fixedString: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true) 
+
+// note: use this variant for fixed messages that are unchanging and can be
+// automatically put into flash memory
+// (note this is the same as the fixedString variant, but using StaticString for convenience)
+func btPrint(_ staticString: StaticString, appendNewline: Bool = true) 
 
 func btAvailable() -> UInt16 
 
