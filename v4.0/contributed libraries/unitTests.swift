@@ -78,18 +78,3 @@ func expectNotEqual<T: Comparable>(_ actual: T, _ expected: T, _ message: Static
         currentStats.failed(message: message, line: line)
     }
 }
-
-let i1: Int64 = 95
-let i2: Int64 = 54
-let i3: Int64 = 9
-let i4: Int64 = 99
-let i5: Int64 = 7
-let i6: Int64 = 46
-
-let ui1: UInt64 = 94
-let ui2: UInt64 = 53
-let ui3: UInt64 = 7
-let ui4: UInt64 = 98
-let ui5: UInt64 = 7
-let ui6: UInt64 = 46
-
