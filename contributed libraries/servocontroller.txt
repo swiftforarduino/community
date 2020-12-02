@@ -9,12 +9,9 @@
 //    Setup the servo controller
 //    Add servos with initial angle and maximum range and offset if required
 //    Set the angle to your servos
+func SetupServos(capacity:UInt8) 
 
-// Setup the servo controller
-func SetupServos(capacity:UInt8)
+func addServo(pin:UInt8, angle:UInt8, max:UInt8 = 180, offset:UInt8 = 0) -> UInt8? 
 
-// Add a servo to the controller
-func addServo(pin:UInt8, angle:UInt8, max:UInt8 = 180, offset:UInt8 = 0) -> UInt8?
+func setServoAngle(_ index:UInt8, angle: UInt8) 
 
-// Set the angle of a servp
-func setServoAngle(_ index:UInt8, angle: UInt8) {

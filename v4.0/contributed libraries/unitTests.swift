@@ -1,12 +1,12 @@
 import AVR
 
-var currentStats = Stats()
+private var currentStats = Stats()
 
-protocol StatInfo {
+private protocol StatInfo {
     func showSummary()
 }
 
-struct Stats {
+private struct Stats {
     var passCount = 0
     var failCount = 0
 
@@ -24,7 +24,7 @@ struct Stats {
 }
 
 extension Stats: StatInfo {
-    func showSummary() {
+    private func showSummary() {
         print(message: "Passed:")
         print(unsignedTinyInt: passCount)
         print(message: "Failed:")
@@ -36,6 +36,23 @@ extension Stats: StatInfo {
     }
 }
 
+/// run this at the start of your tests, passing a message like "ALU 8 bit logic tests"
+func printStart(_ testDescription: StaticString) {
+  print(testDescription)
+  print("tests started")
+}
+
+/// run this at the end of your tests, to show a summary of passes and failures
+func printSummary() {
+  print("tests finished")
+  currentStats.showSummary()
+}
+
+/// use this to indicate a logic path that cannot happen in well behaving code
+func expectFail(_ message: StaticString = "test failed", _ line: UInt = #line) {
+}
+
+/// use this to create a generalised assertion of an expression
 func expect(_ test: @autoclosure () -> Bool, _ message: StaticString = "test failed", _ line: UInt = #line) {
     if test() {
         currentStats.passed()
@@ -44,6 +61,7 @@ func expect(_ test: @autoclosure () -> Bool, _ message: StaticString = "test fai
     }
 }
 
+/// use this to assert equality of two matching types
 func expect<T: Comparable>(_ actual: T, _ expected: T, _ message: StaticString = "test failed", _ line: UInt = #line) {
     if actual == expected {
         currentStats.passed()
@@ -52,13 +70,13 @@ func expect<T: Comparable>(_ actual: T, _ expected: T, _ message: StaticString =
     }
 }
 
-func printStart(_ startMessage: StaticString = "tests started") {
-  print(startMessage)
-}
-
-func printSummary() {
-  print("tests finished")
-  currentStats.showSummary()
+/// use this to assert non equality of two matching types
+func expectNotEqual<T: Comparable>(_ actual: T, _ expected: T, _ message: StaticString = "test failed", _ line: UInt = #line) {
+    if actual != expected {
+        currentStats.passed()
+    } else {
+        currentStats.failed(message: message, line: line)
+    }
 }
 
 let i1: Int64 = 95
@@ -68,7 +86,6 @@ let i4: Int64 = 99
 let i5: Int64 = 7
 let i6: Int64 = 46
 
-// same for uint8
 let ui1: UInt64 = 94
 let ui2: UInt64 = 53
 let ui3: UInt64 = 7

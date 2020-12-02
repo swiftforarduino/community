@@ -1,0 +1,18 @@
+/// run this at the start of your tests, passing a message like "ALU 8 bit logic tests"
+func printStart(_ testDescription: StaticString) 
+
+/// run this at the end of your tests, to show a summary of passes and failures
+func printSummary() 
+
+/// use this to indicate a logic path that cannot happen in well behaving code
+func expectFail(_ message: StaticString = "test failed", _ line: UInt = #line) 
+
+/// use this to create a generalised assertion of an expression
+func expect(_ test: @autoclosure () -> Bool, _ message: StaticString = "test failed", _ line: UInt = #line) 
+
+/// use this to assert equality of two matching types
+func expect<T: Comparable>(_ actual: T, _ expected: T, _ message: StaticString = "test failed", _ line: UInt = #line) 
+
+/// use this to assert non equality of two matching types
+func expectNotEqual<T: Comparable>(_ actual: T, _ expected: T, _ message: StaticString = "test failed", _ line: UInt = #line) 
+
