@@ -6,3 +6,4 @@
 *.elf
 build_log.txt
 error_log.txt
+.DS_Store
