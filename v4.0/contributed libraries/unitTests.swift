@@ -24,7 +24,7 @@ private struct Stats {
 }
 
 extension Stats: StatInfo {
-    private func showSummary() {
+    fileprivate func showSummary() {
         print(message: "Passed:")
         print(unsignedTinyInt: passCount)
         print(message: "Failed:")
