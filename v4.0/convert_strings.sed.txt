@@ -1,0 +1,8 @@
+# Convert old format strings.c file to strings.def
+# from 
+# const char start2Mem[] PROGMEM = "start"; const char * start2 = &start2Mem[0];
+# to
+# PROGMEM_STRING(start2, "start")
+
+s/const char .*(".+"); const char \* ([[:alnum:]]+).*$/PROGMEM_STRING(\2, \1)/p
+s/^.*pgmspace.h.*$/\/\/ Converted from old format./p

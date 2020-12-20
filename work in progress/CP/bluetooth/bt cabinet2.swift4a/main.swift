@@ -81,10 +81,8 @@ func showSolidColour(hue: UInt8, value: UInt8) {
         col = iLEDOff
     }
 
-    var i: UInt16 = 1
-    while i <= pixelCount {
-      iLEDFastWritePixel(color: col)
-      i = i &+ 1
+    for _ in 1...pixelCount {
+        iLEDFastWritePixel(color: col)
     }
 }
 
@@ -103,6 +101,45 @@ func sendCurrentState() {
     btPrint(buffer: currentState().data)
 }
 
+func fadeOn() {
+    setOn()
+
+    let duration: UInt16 = 500
+    let brightnessStep = duration / UInt16(50)
+
+    // fade in to current value
+    var brightness = 0
+    while brightness < 255 {
+        brightness = brightness &+ 5
+        if brightness >= currentValue {
+            break
+        }
+        showSolidColour(hue: currentHue, value: brightness)
+        delay(ms: brightnessStep)
+    }
+
+    showSolidColour(hue: currentHue, value: currentValue)
+}
+
+func fadeOff() {
+    let duration: UInt16 = 500
+
+    let brightnessStep = duration / UInt16(50)
+
+    var brightness = currentValue
+    while brightness > 0 {
+        brightness = brightness &- 5
+        showSolidColour(hue: currentHue, value: brightness)
+        delay(ms: brightnessStep)
+        if brightness < 10 {
+            brightness = 0
+        }
+    }
+
+    setOff()
+    showSolidColour(hue: currentHue, value: currentValue)
+}
+
 func setOn() {
     on = true
     writeEEPROMWithoutVerify(address: 299, value: 1)
@@ -115,7 +152,6 @@ func setOff() {
 
 func getBTCommand() -> (data: AVRString, length: UInt8) {
     while btAvailable() == 0 {} // block until data
-
     stringStartNew()
 
     var length: UInt8 = 0
@@ -144,11 +180,23 @@ func interpretCommand(cmd: (data: AVRString, length: UInt8)) {
 
     if len > 0, data[0] == 0x30 {
         setOff()
+        showSolidColour(hue: currentHue, value: currentValue)
         return
     }
 
     if len > 0, data[0] == 0x31 {
         setOn()
+        showSolidColour(hue: currentHue, value: currentValue)
+        return
+    }
+
+    if len > 0, data[0] == 0x32 {
+        fadeOff()
+        return
+    }
+
+    if len > 0, data[0] == 0x33 {
+        fadeOn()
         return
     }
 
@@ -180,15 +228,14 @@ showSolidColour(hue: currentHue, value: currentValue)
 btStart(verbose: true)
 btSetEcho(on: false)
 btSetVerbose(on: false)
-btSendCommand(fixedString: str0)
+btSendCommand("AT+GAPDEVNAME=S4A BT Device")
 
 // ...wait for connection, then go to data mode
 while !btIsConnected() {}
-print(message: str1)
+print("connected")
 btSetMode(mode: btDataMode)
 
 //delay(ms: 3000)
-
 // wait for commands to come in over bluetooth and implement them
 while(true) {
     let cmd = getBTCommand()

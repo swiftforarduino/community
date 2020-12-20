@@ -32,6 +32,15 @@ func btCheckMinimumVersion(versionFixedString: Optional<UnsafePointer<Int8>>) ->
     return btcheckminimumversionfixedstring(versionFixedString)
 }
 
+func btCheckMinimumVersion(_ versionStaticString: StaticString) -> Bool {
+    if versionStaticString.hasPointerRepresentation {
+        return btcheckminimumversionstaticstring(Int16(versionStaticString.utf8CodeUnitCount), versionStaticString.utf8Start)
+    } else {
+        // not handled
+        return false
+    }
+}
+
 @discardableResult
 func btFactoryReset() -> Bool {
 	return btfactoryreset()
@@ -63,6 +72,19 @@ func btSendCommand(fixedString: Optional<UnsafePointer<Int8>>) -> Bool {
 	return btsendcommandfixedstring(fixedString)
 }
 
+// note: use this variant for fixed commands that are unchanging and can be
+// automatically put into flash memory
+// (note this is the same as the fixedString variant, but using StaticString for convenience)
+@discardableResult
+func btSendCommand(_ staticString: StaticString) -> Bool {
+    if staticString.hasPointerRepresentation {
+        return btsendcommandstaticstring(Int16(staticString.utf8CodeUnitCount), staticString.utf8Start)
+    } else {
+        // not handled
+        return false
+    }
+}
+
 @discardableResult
 func btWaitForOK() -> Bool {
 	return btwaitforok()
@@ -79,6 +101,17 @@ func btPrint(buffer: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true) 
 // automatically put into flash memory
 func btPrint(fixedString: Optional<UnsafePointer<Int8>>, appendNewline: Bool = true) {
 	btprintfixedstring(fixedString, appendNewline)
+}
+
+// note: use this variant for fixed messages that are unchanging and can be
+// automatically put into flash memory
+// (note this is the same as the fixedString variant, but using StaticString for convenience)
+func btPrint(_ staticString: StaticString, appendNewline: Bool = true) {
+    if staticString.hasPointerRepresentation {
+        btprintstaticstring(Int16(staticString.utf8CodeUnitCount), staticString.utf8Start, appendNewline)
+    } else {
+        // not handled
+    }
 }
 
 func btAvailable() -> UInt16 {
