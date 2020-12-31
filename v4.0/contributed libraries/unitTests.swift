@@ -78,3 +78,24 @@ func expectNotEqual<T: Comparable>(_ actual: T, _ expected: T, _ message: Static
         currentStats.failed(message: message, line: line)
     }
 }
+
+// these two methods are for testing string buffers against expected constants
+func expect(_ actual: AVRStringBuffer, _ expected: StaticString, _ message: StaticString = "test failed", _ line: UInt = #line) {
+    let length = max(Int(actual.currentLength), expected.utf8CodeUnitCount)
+
+    expected.utf8Start.withMemoryRebound(to: Int8.self, capacity: length) { ptr in
+        if __stringCompareForTesting(expected: ptr, actual: actual.currentValue, actualLength: UInt8(length)) {
+          currentStats.passed()
+        } else {
+          currentStats.failed(message: message, line: line)
+        }
+    }
+}
+
+func expect(_ actual: CString, _ expected: AVRString, length currentLength: UInt, _ message: StaticString = "test failed", _ line: UInt = #line) {
+    if __stringCompareForTesting(expected:expected, actual: actual, actualLength: UInt8(currentLength)) {
+      currentStats.passed()
+    } else {
+      currentStats.failed(message: message, line: line)
+    }
+}
