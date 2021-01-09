@@ -1,9 +1,10 @@
+// Libraries:
 import AVR
 
 // Blink
 SetupSerial()
 pinMode(pin: 13, mode: OUTPUT)
-print(message: Welcome0)
+print("Welcome to S4A")
 
 while(true) {
   digitalWrite(pin: 13, value: HIGH)
