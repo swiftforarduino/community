@@ -1,4 +1,0 @@
-func fadeIn(pin: UInt8, duration: UInt16) 
-
-func fadeOut(pin: UInt8, duration: UInt16) 
-

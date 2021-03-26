@@ -1,0 +1,4 @@
+module TimerInterrupts {
+  header "TimerInterrupts.h"
+	link "TimerInterrupts"
+}

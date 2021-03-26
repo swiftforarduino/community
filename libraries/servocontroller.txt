@@ -1,0 +1,17 @@
+// Author: Mark Oxley
+// Date: 26/11/2020
+// IDE Version: 4.2
+// Description: This library uses Timer1 based interrupt callback functions to
+// control a number of servos, giving angles between 0 and 180 degrees.
+// If more a servo is added when the capacity has been reached, addServo will return nil.
+// Any angle set outside of the range of the servo will be clipped.
+// To use:
+//    Setup the servo controller
+//    Add servos with initial angle and maximum range and offset if required
+//    Set the angle to your servos
+func SetupServos(capacity:UInt8) 
+
+func addServo(pin:UInt8, angle:UInt8, max:UInt8 = 180, offset:UInt8 = 0) -> UInt8? 
+
+func setServoAngle(_ index:UInt8, angle: UInt8) 
+

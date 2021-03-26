@@ -1,1 +1,0 @@
-These are examples demonstrated in my lectures.

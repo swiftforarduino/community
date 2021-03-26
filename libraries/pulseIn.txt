@@ -1,0 +1,9 @@
+// Author: Mark Oxley
+// Date: 24/11/2020
+// IDE Version: 4.2
+// Description: This library allows you to read the number of ticks of a pulse return.
+// If no pulse is returned, then nil is returned.
+// As this relies on ticks, it is not accurate enough for anything more than obstacle detection.
+// When using Ultrasonic, a pulse takes approximately 1 tick to travel 160 mm (80 mm there and 80 mm back).
+func pulseIn(pin: Pin, timeout: UInt32 = 500) -> UInt16? 
+

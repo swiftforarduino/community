@@ -1,0 +1,49 @@
+# This file lists all libraries and documentation the S4A IDE should automatically download
+# standard libraries
+MPL31155A2.swift
+rotaryEncoder.swift
+servo.swift
+stepper-28BYJ-48.swift
+iLEDHelpers.swift
+DHT11.swift
+Grove2DigitAlnum.swift
+fade.swift
+pulseIn.swift
+unitTests.swift
+
+# standard library documentation
+MPL31155A2.txt
+rotaryEncoder.txt
+servo.txt
+stepper-28BYJ-48.txt
+iLEDHelpers.txt
+DHT11.txt
+Grove2DigitAlnum.txt
+fade.txt
+pulseIn.txt
+unitTests.txt
+
+# unsafe libraries and documentation
+unsafeSeeed_RGB_LED_Matrix.swift
+unsafeSeeed_RGB_LED_Matrix.txt
+Seeed_RGB_LED_Matrix/libSeeed_RGB_LED_Matrix.a
+Seeed_RGB_LED_Matrix/module.modulemap
+Seeed_RGB_LED_Matrix/Seeed_RGB_LED_Matrix.h
+
+unsafeAdafruit_Bluefruit_LE.swift
+unsafeAdafruit_Bluefruit_LE.txt
+Adafruit_Bluefruit_LE/Adafruit_Bluefruit_LE.h
+Adafruit_Bluefruit_LE/module.modulemap
+Adafruit_Bluefruit_LE/libAdafruit_Bluefruit_LE.a
+
+unsafeMAX30105.swift
+unsafeMAX30105.txt
+MAX30105/MAX30105_.h
+MAX30105/module.modulemap
+MAX30105/libMAX30105.a
+
+unsafeTimerInterrupts.swift
+unsafeTimerInterrupts.txt
+TimerInterrupts/module.modulemap
+TimerInterrupts/libTimerInterrupts.a
+TimerInterrupts/TimerInterrupts.h

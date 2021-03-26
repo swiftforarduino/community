@@ -1,7 +1,0 @@
-// Start a servo and set initial angle
-// Angles are in degrees from 0-90
-// Values outside that range are clipped
-func startServo(angle: UInt8, pin: UInt8) 
-
-func setServoAngle(angle: UInt8) 
-
