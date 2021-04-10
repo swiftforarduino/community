@@ -3,6 +3,7 @@
 MPL31155A2.swift
 rotaryEncoder.swift
 servo.swift
+servocontroller.swift
 stepper-28BYJ-48.swift
 iLEDHelpers.swift
 DHT11.swift
@@ -15,6 +16,7 @@ unitTests.swift
 MPL31155A2.txt
 rotaryEncoder.txt
 servo.txt
+servocontroller.txt
 stepper-28BYJ-48.txt
 iLEDHelpers.txt
 DHT11.txt
