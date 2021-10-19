@@ -46,10 +46,10 @@ func sendTransmission(str: StaticString) {
     print("sending:")
     print(str)
     // issue a start and trigger TWI to act on it
-    TWCR |= (1<<TWINT)|(1<<TWSTA)
-    
+    TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN)
+
     waitForBusClear()
-    
+
     // address slave for WRITE
     TWDR = slaveAddress<<1
     // we need to reset all bits except TWEN
@@ -58,17 +58,17 @@ func sendTransmission(str: StaticString) {
     // (i.e. to tell TWI that the application software has completed and is handing control
     // of TWI back to the hardware, you need to write 1 to TWINT (counterintuitively)
     TWCR = (1<<TWINT)|(1<<TWEN)
-    
+
     waitForBusClear()
-    
+
     for char in str {
         TWDR = char
         TWCR |= 1<<TWINT // reset TWINT... all other bits are still OK
         waitForBusClear()
     }
-    
+
     // send stop
-    TWCR |= (1<<TWINT)|(1<<TWSTO)
+    TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN)
     waitForBusClear()
     print("sent")
 }
