@@ -25,7 +25,7 @@ func waitForBusClear(withTimeout t: UInt32) -> Bool {
 
     // TWINT bit == 0 means TWI hardware is idle
     while ((TWCR&(1<<TWINT))==0&&ticks()<timeoutTicks) {}
-    return TWCR&(1<<TWINT) == 0
+    return TWCR&(1<<TWINT) == 1
 }
 
 pinMode(pin: indicator, mode: OUTPUT)
@@ -69,8 +69,13 @@ func sendTransmission(str: StaticString) {
 
     // send stop
     TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN)
-    waitForBusClear()
-    print("sent")
+    // bizarrely, stop is the only case where TWINT does not indicate completion
+    // instead the TWSTO bit is automatically cleared in TWCR when the stop has been transmitted!
+    while (TWCR&(1<<TWSTO))==1 {}
+    print("stop sent")
+    
+//    let cleared = waitForBusClear(withTimeout: 100)
+//    print(cleared ? "sent (cleared)" : "send (timed out)")
 }
 
 sendTransmission(str: "Hello, World!...")

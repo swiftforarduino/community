@@ -82,7 +82,7 @@ while true {
         }
 
         // simulate very slow processing from our callback
-        delay(ms: 10)
+        delay(ms: 57)
 
 // existing version does this... buggy?
 //        // put the slave back to listening for its address
