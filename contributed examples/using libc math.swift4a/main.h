@@ -5,5 +5,7 @@
 // getting something to compile, add a normal .c file (and optionally header)
 // with wrapper functions, then declare the wrapper function here instead
 
+#import <math.h>
+
 float _sin(float theta);
 float _log(float f);
