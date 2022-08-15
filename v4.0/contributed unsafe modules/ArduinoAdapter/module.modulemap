@@ -1,0 +1,4 @@
+module Arduino {
+  header "Arduino.h"
+	link "Arduino"
+}
