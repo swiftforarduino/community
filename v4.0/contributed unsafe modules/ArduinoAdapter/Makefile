@@ -1,6 +1,6 @@
 # outputs
 COPIED_FILES_U=module.modulemap Arduino.h SimpleDebugPrinter.h DebugPrinter.h Print.h Stream.h shims.h AdapterSerial.h\
-Wire.h
+Wire.h binary.h
 
 # these seem to crash programs
 # IPAddress.h Printable.h

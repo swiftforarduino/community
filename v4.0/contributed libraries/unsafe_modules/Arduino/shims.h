@@ -3,7 +3,6 @@
 
 #ifndef _SHIMS_H_
 #define _SHIMS_H_
-extern "C" {
 
 #ifndef uint32
 #define uint32 uint32_t
@@ -40,6 +39,12 @@ extern "C" {
 #define delayMicroseconds _delayUs
 #endif
 
+#ifndef delay
+#define delay _delayMs
+#endif
+
+extern "C" {
+
 	void _i2cinit(unsigned char speed, unsigned char premultiplier, _Bool activatePullups);
 	_Bool _i2cstart();
 	void _i2cstop();
@@ -48,7 +53,7 @@ extern "C" {
 
 	// higher level I2C
 	void _i2cWriteByte(unsigned char address, unsigned char byte);
-	void _i2cWriteBuffer(unsigned char address, unsigned short maxMsgLen, const char * buffer, _Bool isString);
+	void _i2cWriteBuffer(unsigned char address, unsigned short maxMsgLen, const char * __nonnull buffer, _Bool isString);
 	const unsigned char * __nullable _i2cReadBuffer(unsigned char address, unsigned char size, unsigned char * __nullable buffer);
 	void _i2cshutdown();
 

@@ -8,6 +8,7 @@
 #include "Stream.h"
 #include "AdapterSerial.h"
 #include "Wire.h"
+#include "binary.h"
 
 // these seem to cause program crashes
 // #include "IPAddress.h"

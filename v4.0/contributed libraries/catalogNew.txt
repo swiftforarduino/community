@@ -66,3 +66,4 @@ unsafe_modules/Arduino/Udp.h
 unsafe_modules/Arduino/Client.h
 unsafe_modules/Arduino/Server.h
 unsafe_modules/Arduino/Wire.h
+unsafe_modules/Arduino/binary.h
