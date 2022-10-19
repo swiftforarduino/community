@@ -1,5 +1,7 @@
 #define ARDUINO_SHIM_DEFINED (unsigned char)1
 
+#define ARDUINO 100
+
 #ifdef __cplusplus
 
 #include "DebugPrinter.h"
