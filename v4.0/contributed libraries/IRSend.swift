@@ -5,6 +5,7 @@
 
 import AVR
 
+// NEC protocol is the most widely used IR protocol.
 // A typical NEC protocol signal should follow this format:
 // Start with a leading pulse and space, followed by an 8-bit(LSB) address and its bit inverted version.
 // Then an 8-bit(LSB) command and its bit inverted version. Finally, end with a terminator.
