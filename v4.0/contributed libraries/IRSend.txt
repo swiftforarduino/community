@@ -1,0 +1,61 @@
+// Author: Jinyu Meng
+// Date: 04/22/2023
+// IDE Version: 5.0
+// Description: This lets you send IR signals using basic NEC protocol.
+
+// A typical NEC protocol signal should follow this format:
+// Start with a leading pulse and space, followed by an 8-bit(LSB) address and its bit inverted version.
+// Then an 8-bit(LSB) command and its bit inverted version. Finally, end with a terminator.
+// Some devices use all 16-bit to contain data instead of sending an inverted correction signal.
+//
+//       (16 Bursts)
+//   Leading Pulse (9ms)            0 (On + Off)                Terminate Burst
+// |---------------------|             |---|   |---|                 |---|
+// |                     |             |   |   |   |                 |   |
+// |                     |             |   |   |   |          ...... |   |
+// |                     |             |   |   |   |                 |   |
+// |                     |-------------|   |---|   |----------      -|   |
+//                        Space (4.5ms)         1 (On + 3 Off)
+//                         (8 Bursts)
+//
+
+/// If your device uses a unique protocol, you can configure this to adapt accordingly.
+/// - Parameters:
+///     - burst: The length of a burst. (us)
+///     - leadingPulse: The length of the leading pulse. Count by bursts.
+///     - leadingPulseSpace: The length of the space after the leading pulse. Count by bursts.
+///     - zeroPulseSpace: The length of the space after a pulse that represents a zero. Count by bursts.
+func configIR(
+    burst: UInt16 = 562,
+    leadingPulse: UInt8 = 16,
+    leadingSpace: UInt8 = 8,
+    zeroSpace: UInt8 = 3
+)
+
+/// Send a typical IR signal.
+/// - Parameters:
+///     - pin: The pin number to which the IR LED is connected.
+///     - address: 8-bit address data.
+///     - command: 8-bit command data.
+func sendIR(pin: UInt8, address: UInt8, command: UInt8)
+
+/// Send an IR signal which uses all address bits.
+/// - Parameters:
+///     - pin: The pin number to which the IR LED is connected.
+///     - address: 16-bit address data.
+///     - command: 8-bit command data.
+func sendIRUseFullAddressBits(pin: UInt8, address: UInt16, command: UInt8)
+
+/// Send an IR signal which uses all command bits.
+/// - Parameters:
+///     - pin: The pin number to which the IR LED is connected.
+///     - address: 8-bit address data.
+///     - command: 16-bit command data.
+func sendIRUseFullCommandBits(pin: UInt8, address: UInt8, command: UInt16)
+
+/// Send an IR signal which uses all address and command bits.
+/// - Parameters:
+///     - pin: The pin number to which the IR LED is connected.
+///     - address: 16-bit address data.
+///     - command: 16-bit command data.
+func sendIRUseFullBits(pin: UInt8, address: UInt16, command: UInt16)
