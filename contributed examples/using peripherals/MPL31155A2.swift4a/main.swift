@@ -9,8 +9,8 @@ blockingCheckSensor()
 blockingSetupSensorFlags()
 
 // setup the serial UART at 9600 baud
-SetupSerial(baudRate: 9600)
-print(message: Started0)
+SetupSerial()
+print(message: "Started")
 
 // this is just a heartbeat so you know it's alive
 let indicatorPin = 8

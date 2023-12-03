@@ -1,10 +1,12 @@
 import AVR
 
+let registerBuffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: 3)
+
 // MPL31155A2 low level helper functions
-func readAltitudeBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
-  let byte1 = UInt8(bitPattern: buffer[0])
-  let byte2 = UInt8(bitPattern: buffer[1])
-  let byte3 = UInt8(bitPattern: buffer[2])
+func readAltitudeBuffer(_ buffer: UnsafePointer<UInt8>) -> Float {
+  let byte1 = buffer[0]
+  let byte2 = buffer[1]
+  let byte3 = buffer[2]
 
    print(unsignedTinyInt: byte1)
    print(unsignedTinyInt: byte2)
@@ -21,19 +23,19 @@ func readAltitudeBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
   }
 }
 
-func readPressureBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
-  let byte1 = UInt8(bitPattern: buffer[0])
-  let byte2 = UInt8(bitPattern: buffer[1])
-  let byte3 = UInt8(bitPattern: buffer[2])
+func readPressureBuffer(_ buffer: UnsafePointer<UInt8>) -> Float {
+  let byte1 = buffer[0]
+  let byte2 = buffer[1]
+  let byte3 = buffer[2]
 
   let combined: Int32 = Int32(byte1)<<16 | Int32(byte2)<<8 | Int32(byte3)
 
   return Float(combined>>4)/4.0
 }
 
-func readTemperatureBuffer(_ buffer: UnsafePointer<Int8>) -> Float {
-  let byte1 = UInt8(bitPattern: buffer[0])
-  let byte2 = UInt8(bitPattern: buffer[1])
+func readTemperatureBuffer(_ buffer: UnsafePointer<UInt8>) -> Float {
+  let byte1 = buffer[0]
+  let byte2 = buffer[1]
 
   let combined: Int32 = Int32(byte1)<<8 | Int32(byte2)
 
@@ -58,6 +60,10 @@ func blockingWaitForStatusFlag(flag: UInt8) {
 
 // MPL31155A2 high level functions
 func blockingGetAltitude() -> Float {
+    guard let registerBufferPtr = registerBuffer?.baseAddress else {
+        return -1
+    }
+
     let slaveAddress: UInt8 = 0x60
     let pressureDataReadyFlag: UInt8 = 0x04
 
@@ -65,11 +71,15 @@ func blockingGetAltitude() -> Float {
   blockingWriteControlReg1(value: 0xB9)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-    let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
-    return readAltitudeBuffer(registerBuffer)
+    let registerBufferOut = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3, buffer: registerBufferPtr)
+    return readAltitudeBuffer(registerBufferOut.baseAddress!)
 }
 
 func blockingGetPressure() -> Float {
+    guard let registerBufferPtr = registerBuffer?.baseAddress else {
+        return -1
+    }
+
     let slaveAddress: UInt8 = 0x60
     let pressureDataReadyFlag: UInt8 = 0x04
 
@@ -77,11 +87,15 @@ func blockingGetPressure() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: pressureDataReadyFlag)
 
-    let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3)
-    return readPressureBuffer(registerBuffer)
+    let registerBufferOut = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x01, registerCount: 3, buffer: registerBufferPtr)
+    return readPressureBuffer(registerBufferOut.baseAddress!)
 }
 
 func blockingGetTemperature() -> Float {
+    guard let registerBufferPtr = registerBuffer?.baseAddress else {
+        return -1
+    } 
+   
     let slaveAddress: UInt8 = 0x60
     let temperatureDataReadyFlag: UInt8 = 0x02
 
@@ -90,8 +104,8 @@ func blockingGetTemperature() -> Float {
   blockingWriteControlReg1(value: 0x39)
   blockingWaitForStatusFlag(flag: temperatureDataReadyFlag)
 
-  let registerBuffer = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2)
-  return readTemperatureBuffer(registerBuffer)
+  let registerBufferOut = blockingReadMultipleI2CRegisters(slaveAddress: slaveAddress, registerStart: 0x04, registerCount: 2, buffer: registerBufferPtr)
+  return readTemperatureBuffer(registerBufferOut.baseAddress!)
 }
 
 @discardableResult
