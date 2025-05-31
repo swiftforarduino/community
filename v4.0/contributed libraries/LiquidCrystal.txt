@@ -1,0 +1,98 @@
+//------------------------------------------------------------------------------
+// Library for Swift For Arduino
+// Library for LiquidCrystal
+// Knihovna pro LiquidCrystal
+//
+// Created by Jiﬁí Novak on 12.05.2025.
+// Copyright © 2025 Jiﬁí Novak. All rights reserved.
+// English
+// This library is a rewrite of the original library [LiquidCrystal](https://github.com/arduino-libraries/LiquidCrystal),
+// created by the Arduino team, which is licensed under the GNU Lesser General Public License (LGPL) v2.1.
+// ãesky
+// Tato knihovna je pﬁepis pÛvodní knihovny [LiquidCrystal](https://github.com/arduino-libraries/LiquidCrystal),
+// vytvoﬁené t˘mem Arduino, která je licencována pod GNU Lesser General Public License (LGPL) v2.1.
+//
+//------------------------------------------------------------------------------Func:// initialization of 4bit communication
+// inicializace 4bitové komunikacefunc InitLCD4bit(RSPIN: UInt8, ENABLE: UInt8, PIN4: UInt8, PIN5: UInt8, PIN6: UInt8, PIN7: UInt8)
+
+// initialization of 8-bit communication
+// inicializace 8bitové komunikace
+func InitLCD8bit(RSPIN: UInt8, ENABLE: UInt8, PIN0: UInt8, PIN1: UInt8, PIN2: UInt8,PIN3: UInt8, PIN4: UInt8, PIN5: UInt8, PIN6: UInt8, PIN7: UInt8)
+
+// Func Start of LCD
+// Funkce zapnutí LCD
+func begin(_ fcols: UInt8,_ frows: UInt8)
+
+// Function for cleaning LCD
+// Funkce pro vyãi‰tûní LCD
+func Clear()
+
+// Function to Return Cursor to default position (0,0)
+// Funkce pro Návrat Kurzoru na v˘chozí pozici (0,0)
+func Home()
+
+// Function for sending the cursor to a specific location
+// Funkce pro poslání kurzoru na urãité místo
+func setCursor(_ col: UInt8,_ row: UInt8)
+
+// Function for printing text on LCD
+// Funkce pro tisk textu na LCD
+func LCDprint(_ text: StaticString)
+
+// Function for printing numbers on LCD
+// Funkce pro tisk âísel na LCD
+func LCDprintInt(_ number: UInt16)
+
+// Shifts the entire LCD one character to the left
+// Posunune cely LCD o jeden znak do leva
+func scrollDisplayLeft() 
+
+// Shifts the entire LCD one character to the right
+// Posunune cely LCD o jeden znak do prava
+func scrollDisplayRight() 
+
+// Function to turn off the LCD
+// Funkce pro vypnutí LCD
+func offDisplay()
+
+// Function to turn on the LCD
+// Funkce pro zapnutí LCD
+func onDisplay()
+
+// Left to right typing function
+// Funkce psaní zleva do prava
+func LeftToRight()
+
+// The function of writing backwards from the back of the display
+// Funkce psaní pospatku od zadu displaye
+func RightToLeft()
+
+// Align text from the cursor to the left
+// Zarovnani text od kurzoru zarovna  doleva
+func AutoScroll()
+
+// Align text from cursor to right
+// Zarovnani textu od kurzoru doprava
+func noAutoScroll()
+
+// Cursor activation function
+// Funkce zapnutí Kurzoru
+func CursorOn()
+
+// Curzor disable function
+// Funkce vypnutí Curzoru
+func CursorOff()
+
+// Cursor blink on function
+// Funkce zapnutí blikání Kurzoru
+func blinkCursorOn()
+
+// Cursor blink off function
+// Funkce vypnutí blikání Kurzoru
+func blinkCursorOff()
+
+// Creating a custom character
+// Vytvoreni vlastniho znaku
+func createChar(_ location: UInt8, _ charmap: [UInt8])
+
+Notes:  - Verze: 1.0  - Autor: Jiﬁí Novák
